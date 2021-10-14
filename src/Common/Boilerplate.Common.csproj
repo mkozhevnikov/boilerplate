@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <AssemblyName>Boilerplate.Common</AssemblyName>
+    <RootNamespace>Boilerplate.Common</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>

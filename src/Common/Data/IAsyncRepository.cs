@@ -8,7 +8,8 @@ namespace Boilerplate.Common.Data
     {
         Task<TR?> GetByIdAsync<TK>(TK id, CancellationToken cancellationToken = default) where TK : notnull;
         Task<TR?> GetBySpecAsync(ISpec<T> specification, CancellationToken cancellationToken = default);
-        Task<IReadOnlyList<TR>> Read(ISpec<T>? specification = null, CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<TR>> ReadAsync(ISpec<T>? specification = null, CancellationToken cancellationToken = default);
+        Task<int> CountAsync(ISpec<T>? specification = null, CancellationToken cancellationToken = default);
     }
 
     public interface IAsyncBaseRepository<T, TR> : IAsyncReadRepository<T, TR>
