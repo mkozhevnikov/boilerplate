@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boilerplate.Common", "src\C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boilerplate.EntityFrameworkCore", "src\EntityFrameworkCore\Boilerplate.EntityFrameworkCore.csproj", "{AED7304D-54E4-4ADB-9B46-DFB1B1FE6E90}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDB", "src\MongoDB\MongoDB.csproj", "{853D579F-475A-40B1-B720-D7A67396081E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,9 +48,22 @@ Global
 		{AED7304D-54E4-4ADB-9B46-DFB1B1FE6E90}.Release|x64.Build.0 = Release|Any CPU
 		{AED7304D-54E4-4ADB-9B46-DFB1B1FE6E90}.Release|x86.ActiveCfg = Release|Any CPU
 		{AED7304D-54E4-4ADB-9B46-DFB1B1FE6E90}.Release|x86.Build.0 = Release|Any CPU
+		{853D579F-475A-40B1-B720-D7A67396081E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{853D579F-475A-40B1-B720-D7A67396081E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{853D579F-475A-40B1-B720-D7A67396081E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{853D579F-475A-40B1-B720-D7A67396081E}.Debug|x64.Build.0 = Debug|Any CPU
+		{853D579F-475A-40B1-B720-D7A67396081E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{853D579F-475A-40B1-B720-D7A67396081E}.Debug|x86.Build.0 = Debug|Any CPU
+		{853D579F-475A-40B1-B720-D7A67396081E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{853D579F-475A-40B1-B720-D7A67396081E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{853D579F-475A-40B1-B720-D7A67396081E}.Release|x64.ActiveCfg = Release|Any CPU
+		{853D579F-475A-40B1-B720-D7A67396081E}.Release|x64.Build.0 = Release|Any CPU
+		{853D579F-475A-40B1-B720-D7A67396081E}.Release|x86.ActiveCfg = Release|Any CPU
+		{853D579F-475A-40B1-B720-D7A67396081E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{272EF4BE-7D1F-4AC6-BA9F-75788966B463} = {D3E0F0A1-4A5A-477E-B6A7-E56D77C8561E}
 		{AED7304D-54E4-4ADB-9B46-DFB1B1FE6E90} = {D3E0F0A1-4A5A-477E-B6A7-E56D77C8561E}
+		{853D579F-475A-40B1-B720-D7A67396081E} = {D3E0F0A1-4A5A-477E-B6A7-E56D77C8561E}
 	EndGlobalSection
 EndGlobal
