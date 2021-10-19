@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 
-namespace Boilerplate.EntityFrameworkCore.Data
+namespace Boilerplate.EntityFrameworkCore
 {
     public class EfRepository<T, TKey> : IRepository<T, TKey>, IAsyncRepository<T, TKey>
         where T : class, IEntity<TKey>
@@ -14,9 +14,9 @@ namespace Boilerplate.EntityFrameworkCore.Data
 
         public EfRepository(DbContext context) => _context = context;
 
-        public virtual T? GetById<TK>(TK id) => _context.Set<T>().Find(id);
+        public virtual T? GetById<TK>(TK id) where TK : notnull => _context.Set<T>().Find(id);
 
-        public virtual async Task<T?> GetByIdAsync<TK>(TK id, CancellationToken cancellationToken) =>
+        public virtual async Task<T?> GetByIdAsync<TK>(TK id, CancellationToken cancellationToken) where TK : notnull =>
             await _context.Set<T>().FindAsync(id, cancellationToken);
 
         public virtual T? GetBySpec(ISpec<T>? specification) =>
