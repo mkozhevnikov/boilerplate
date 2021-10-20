@@ -17,7 +17,7 @@ namespace Boilerplate.Common.Data
         Task<TR> CreateAsync(T entity, CancellationToken cancellationToken = default);
         Task<TR> UpdateAsync(T entity, CancellationToken cancellationToken = default);
         Task DeleteAsync(T entity, CancellationToken cancellationToken = default);
-        Task DeleteAsync<TK>(TK key, CancellationToken cancellationToken = default);
+        Task DeleteAsync<TK>(TK key, CancellationToken cancellationToken = default) where TK : notnull;
         Task SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 

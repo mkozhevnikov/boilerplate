@@ -77,7 +77,7 @@ namespace Boilerplate.EntityFrameworkCore
             await SaveChangesAsync(cancellationToken);
         }
 
-        public virtual void Delete<TK>(TK id)
+        public virtual void Delete<TK>(TK id) where TK : notnull
         {
             var entity = GetById(id);
             if (entity is null) return;
@@ -85,7 +85,7 @@ namespace Boilerplate.EntityFrameworkCore
             SaveChanges();
         }
 
-        public virtual async Task DeleteAsync<TK>(TK id, CancellationToken cancellationToken)
+        public virtual async Task DeleteAsync<TK>(TK id, CancellationToken cancellationToken) where TK : notnull
         {
             var entity = await GetByIdAsync(id, cancellationToken);
             if (entity is null) return;

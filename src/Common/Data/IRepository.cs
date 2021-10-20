@@ -15,7 +15,7 @@ namespace Boilerplate.Common.Data
         TR Create(T entity);
         TR Update(T entity);
         void Delete(T entity);
-        void Delete<TK>(TK key);
+        void Delete<TK>(TK key) where TK : notnull;
         void SaveChanges();
     }
 
