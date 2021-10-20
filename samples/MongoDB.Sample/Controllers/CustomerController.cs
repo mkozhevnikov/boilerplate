@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Boilerplate.Common.Data;
 
 namespace Boilerplate.MongoDB.Sample.Controllers
 {
@@ -12,40 +13,54 @@ namespace Boilerplate.MongoDB.Sample.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ILogger<CustomerController> _logger;
+        private readonly IRepository<Customer, string> _repository;
 
-        public CustomerController(ILogger<CustomerController> logger)
+        public CustomerController(ILogger<CustomerController> logger, IRepository<Customer, string> repository)
         {
             _logger = logger;
+            _repository = repository;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Customer>> GetCustomers()
         {
-            return null;
+            return Ok(_repository.Read());
         }
 
         [HttpGet("{id}", Name = "GetCustomerById")]
         public ActionResult<Customer> GetCustomer(string id)
         {
-            return null;
+            var customer = _repository.GetById(id);
+            
+            if (customer is null)
+                return NotFound();
+            return Ok(customer);
         }
 
         [HttpPost]
         public ActionResult<Customer> CreateCustomer(CustomerCreateDto model)
         {
-            return null;
+            var customer = _repository.Create(new Customer {
+                Name = model.Name
+            });
+            return CreatedAtRoute(nameof(GetCustomer), new { Id = customer.Id }, customer);
         }
 
         [HttpPatch]
         public ActionResult<Customer> UpdateCustomer(CustomerUpdateDto model)
         {
-            return null;
+            var customer = _repository.Update(new Customer {
+                Id = model.Id,
+                Name = model.Name
+            });
+            return Ok(customer);
         }
 
         [HttpDelete("{id}")]
         public ActionResult DeleteCustomer(string id)
         {
-            return null;
+            _repository.Delete(id);
+            return NoContent();
         }
     }
 }
