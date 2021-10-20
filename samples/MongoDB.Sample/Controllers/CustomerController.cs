@@ -24,7 +24,7 @@ namespace Boilerplate.MongoDB.Sample.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Customer>> GetCustomers()
         {
-            return Ok(_repository.Read());
+            return Ok(_repository.Read(Specs.True<Customer>()));
         }
 
         [HttpGet("{id}", Name = "GetCustomerById")]
@@ -43,14 +43,14 @@ namespace Boilerplate.MongoDB.Sample.Controllers
             var customer = _repository.Create(new Customer {
                 Name = model.Name
             });
-            return CreatedAtRoute(nameof(GetCustomer), new { Id = customer.Id }, customer);
+            return CreatedAtRoute("GetCustomerById", new { Id = customer.Id }, customer);
         }
 
-        [HttpPatch]
-        public ActionResult<Customer> UpdateCustomer(CustomerUpdateDto model)
+        [HttpPatch("{id}")]
+        public ActionResult<Customer> UpdateCustomer(string id, CustomerUpdateDto model)
         {
             var customer = _repository.Update(new Customer {
-                Id = model.Id,
+                Id = id,
                 Name = model.Name
             });
             return Ok(customer);
