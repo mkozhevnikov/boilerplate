@@ -15,10 +15,10 @@
     <Copyright>Copyright © Project Author. All rights Reserved</Copyright>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com//boilerplate</PackageProjectUrl>
-    <RepositoryUrl>https://github.com//boilerplate.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/mkozhevnikov/boilerplate</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mkozhevnikov/boilerplate.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>https://github.com//boilerplate/releases</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/mkozhevnikov/boilerplate/releases</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup Label="Package References">
