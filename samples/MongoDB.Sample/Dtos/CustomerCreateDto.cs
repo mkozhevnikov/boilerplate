@@ -1,6 +1,6 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Boilerplate.MongoDB.Sample.Dtos;
+
+using System.ComponentModel.DataAnnotations;
 
 public class CustomerCreateDto
 {

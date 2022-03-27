@@ -1,7 +1,6 @@
-using System;
-using System.Linq.Expressions;
-
 namespace Boilerplate.Common.Data;
+
+using System.Linq.Expressions;
 
 public interface ISpec<T>
 {

@@ -1,11 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-using Boilerplate.Common.Data;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Linq;
-
 namespace Boilerplate.EntityFrameworkCore;
+
+using Common.Data;
+using Microsoft.EntityFrameworkCore;
 
 public class EfRepository<T, TKey> : IRepository<T, TKey>, IAsyncRepository<T, TKey>
     where T : class, IEntity<TKey>

@@ -1,8 +1,7 @@
-using System;
-using System.Linq.Expressions;
-using Boilerplate.Common.Utils;
-
 namespace Boilerplate.Common.Data;
+
+using System.Linq.Expressions;
+using Utils;
 
 public static class Specs
 {

@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Boilerplate.Common.Data;
-using Boilerplate.MongoDB.Sample.Dtos;
-using Boilerplate.MongoDB.Sample.Models;
+﻿namespace Boilerplate.MongoDB.Sample.Controllers;
 
-namespace Boilerplate.MongoDB.Sample.Controllers;
+using Common.Data;
+using Dtos;
+using Microsoft.AspNetCore.Mvc;
+using Models;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -27,7 +26,7 @@ public class CustomerController : ControllerBase
     public ActionResult<Customer> GetCustomer(string id)
     {
         var customer = _repository.GetById(id);
-            
+
         if (customer is null)
             return NotFound();
         return Ok(customer);

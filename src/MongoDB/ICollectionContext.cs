@@ -1,6 +1,6 @@
-using MongoDB.Driver;
-
 namespace Boilerplate.MongoDB;
+
+using global::MongoDB.Driver;
 
 public interface ICollectionContext
 {

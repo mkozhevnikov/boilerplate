@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Boilerplate.Common.Data;
 
 public interface IReadRepository<T, TR>

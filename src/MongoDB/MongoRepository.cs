@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Boilerplate.Common.Data;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
+﻿namespace Boilerplate.MongoDB;
 
-namespace Boilerplate.MongoDB;
+using System.Linq;
+using Common.Data;
+using global::MongoDB.Driver;
+using global::MongoDB.Driver.Linq;
 
 public class MongoRepository<T, TKey> : IRepository<T, TKey>, IAsyncRepository<T, TKey>
     where T : class, IEntity<TKey>

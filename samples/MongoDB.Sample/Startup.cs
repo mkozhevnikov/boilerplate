@@ -1,13 +1,8 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Boilerplate.Common.Data;
-using Boilerplate.MongoDB.Sample.Models;
-using MongoDB.Driver;
-
 namespace Boilerplate.MongoDB.Sample;
+
+using Common.Data;
+using global::MongoDB.Driver;
+using Models;
 
 public partial class Startup
 {
@@ -19,7 +14,7 @@ public partial class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton(CreateClient);
-        services.AddSingleton(provider => 
+        services.AddSingleton(provider =>
             provider.GetRequiredService<IMongoClient>().GetDatabase("custdb"));
         services.AddTransient<ICollectionContext, CustomerCollectionContext>();
         services.AddTransient<IRepository<Customer, string>, MongoRepository<Customer, string>>();
