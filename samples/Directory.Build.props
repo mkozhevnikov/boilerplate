@@ -1,0 +1,9 @@
+<Project>
+
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup Label="Temporarily">
+    <NoWarn>CS8618,SA0001</NoWarn>
+  </PropertyGroup>
+
+</Project>

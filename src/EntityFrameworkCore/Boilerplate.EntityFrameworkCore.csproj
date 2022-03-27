@@ -3,9 +3,12 @@
   <PropertyGroup>
     <AssemblyName>Boilerplate.EntityFrameworkCore</AssemblyName>
     <RootNamespace>Boilerplate.EntityFrameworkCore</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package">
+    <Product>Boilerplate EntityFramework Core</Product>
+    <Description>Persistence implementation using EF Core</Description>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D3E0F0A1-4A5A-477E-B6A7-E56D77C8561E}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.props = src\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boilerplate.Common", "src\Common\Boilerplate.Common.csproj", "{272EF4BE-7D1F-4AC6-BA9F-75788966B463}"
 EndProject
@@ -12,6 +15,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boilerplate.MongoDB", "src\MongoDB\Boilerplate.MongoDB.csproj", "{8CEFC556-B6E9-4F49-B241-D418DE8BA57B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{99834A5B-0990-4DDE-BA03-6BD994E12B98}"
+	ProjectSection(SolutionItems) = preProject
+		samples\Directory.Build.props = samples\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boilerplate.MongoDB.Sample", "samples\MongoDB.Sample\Boilerplate.MongoDB.Sample.csproj", "{D8871CE2-D6F2-414B-B76B-65171199411B}"
 EndProject
@@ -21,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{790CDD4D-9
 		.gitignore = .gitignore
 		LICENSE = LICENSE
 		.dockerignore = .dockerignore
+		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
 Global

@@ -3,9 +3,12 @@
   <PropertyGroup>
     <AssemblyName>Boilerplate.MongoDB</AssemblyName>
     <RootNamespace>Boilerplate.MongoDB</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package">
+    <Product>Boilerplate MongoDb</Product>
+    <Description>Persistence implementation for MongoDb</Description>
   </PropertyGroup>
 
   <ItemGroup>
