@@ -7,37 +7,36 @@ using Boilerplate.Common.Data;
 using Boilerplate.MongoDB.Sample.Models;
 using MongoDB.Driver;
 
-namespace Boilerplate.MongoDB.Sample
+namespace Boilerplate.MongoDB.Sample;
+
+public partial class Startup
 {
-    public partial class Startup
+    public IConfiguration Configuration { get; }
+
+    public Startup(IConfiguration configuration) => Configuration = configuration;
+
+    // This method gets called by the runtime. Use this method to add services to the container.
+    public void ConfigureServices(IServiceCollection services)
     {
-        public IConfiguration Configuration { get; }
+        services.AddSingleton(CreateClient);
+        services.AddSingleton(provider => 
+            provider.GetRequiredService<IMongoClient>().GetDatabase("custdb"));
+        services.AddTransient<ICollectionContext, CustomerCollectionContext>();
+        services.AddTransient<IRepository<Customer, string>, MongoRepository<Customer, string>>();
+        services.AddControllers();
+    }
 
-        public Startup(IConfiguration configuration) => Configuration = configuration;
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
         {
-            services.AddSingleton(CreateClient);
-            services.AddSingleton(provider => 
-                provider.GetRequiredService<IMongoClient>().GetDatabase("custdb"));
-            services.AddTransient<ICollectionContext, CustomerCollectionContext>();
-            services.AddTransient<IRepository<Customer, string>, MongoRepository<Customer, string>>();
-            services.AddControllers();
+            app.UseDeveloperExceptionPage();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+        app.UseHttpsRedirection();
 
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
-        }
+        app.UseRouting();
+        app.UseEndpoints(endpoints => endpoints.MapControllers());
     }
 }

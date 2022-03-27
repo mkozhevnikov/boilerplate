@@ -1,11 +1,10 @@
 using MongoDB.Driver;
 
-namespace Boilerplate.MongoDB
-{
-    public interface ICollectionContext
-    {
-        string Name { get; }
+namespace Boilerplate.MongoDB;
 
-        IMongoDatabase DB { get; }
-    }
+public interface ICollectionContext
+{
+    string Name { get; }
+
+    IMongoDatabase DB { get; }
 }
