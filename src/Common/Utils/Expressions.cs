@@ -1,7 +1,6 @@
-using System;
-using System.Linq.Expressions;
-
 namespace Boilerplate.Common.Utils;
+
+using System.Linq.Expressions;
 
 public static class Expressions
 {

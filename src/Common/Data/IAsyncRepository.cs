@@ -1,7 +1,3 @@
-using System.Threading;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-
 namespace Boilerplate.Common.Data;
 
 public interface IAsyncReadRepository<T, TR>
