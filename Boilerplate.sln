@@ -25,9 +25,44 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{790CDD4D-9
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
-		LICENSE = LICENSE
+		.gitattributes = .gitattributes
 		.dockerignore = .dockerignore
 		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		dotnet-tools.json = dotnet-tools.json
+		global.json = global.json
+		Key.snk = Key.snk
+		build.cake = build.cake
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{7B0B1CE5-9D28-4EF0-BCB8-3D16E0179F42}"
+	ProjectSection(SolutionItems) = preProject
+		.github\release-drafter.yml = .github\release-drafter.yml
+		.github\dependabot.yml = .github\dependabot.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{7BD3D4BA-EB53-4B2B-BADC-531382AD853F}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{9DB84352-81D8-4DB6-AB6B-369AA5B6623B}"
+	ProjectSection(SolutionItems) = preProject
+		.github\CONTRIBUTING.md = .github\CONTRIBUTING.md
+		.github\PULL_REQUEST_TEMPLATE.md = .github\PULL_REQUEST_TEMPLATE.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{3B76F3A1-3406-44B5-AAF1-F0030B8CA721}"
+	ProjectSection(SolutionItems) = preProject
+		.github\ISSUE_TEMPLATE\FEATURE_REQUEST.yml = .github\ISSUE_TEMPLATE\FEATURE_REQUEST.yml
+		.github\ISSUE_TEMPLATE\BUG_REPORT.yml = .github\ISSUE_TEMPLATE\BUG_REPORT.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{C6A04A9A-DE52-4010-AA79-1E8251BBD5EE}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
+		.github\workflows\release-drafter.yml = .github\workflows\release-drafter.yml
+		.github\workflows\build.yml = .github\workflows\build.yml
 	EndProjectSection
 EndProject
 Global
@@ -97,5 +132,9 @@ Global
 		{AED7304D-54E4-4ADB-9B46-DFB1B1FE6E90} = {D3E0F0A1-4A5A-477E-B6A7-E56D77C8561E}
 		{8CEFC556-B6E9-4F49-B241-D418DE8BA57B} = {D3E0F0A1-4A5A-477E-B6A7-E56D77C8561E}
 		{D8871CE2-D6F2-414B-B76B-65171199411B} = {99834A5B-0990-4DDE-BA03-6BD994E12B98}
+		{7B0B1CE5-9D28-4EF0-BCB8-3D16E0179F42} = {790CDD4D-9EF7-4EE1-85B3-EAA2DD9A9E34}
+		{9DB84352-81D8-4DB6-AB6B-369AA5B6623B} = {7BD3D4BA-EB53-4B2B-BADC-531382AD853F}
+		{3B76F3A1-3406-44B5-AAF1-F0030B8CA721} = {9DB84352-81D8-4DB6-AB6B-369AA5B6623B}
+		{C6A04A9A-DE52-4010-AA79-1E8251BBD5EE} = {7B0B1CE5-9D28-4EF0-BCB8-3D16E0179F42}
 	EndGlobalSection
 EndGlobal
