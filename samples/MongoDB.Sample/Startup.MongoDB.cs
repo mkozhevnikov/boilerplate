@@ -1,8 +1,8 @@
 using System;
+using Boilerplate.MongoDB.Sample.Models;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Configuration;
 using MongoDB.Bson.Serialization;
-using Boilerplate.MongoDB;
 
 namespace Boilerplate.MongoDB.Sample
 {

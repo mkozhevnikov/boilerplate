@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Boilerplate.Common.Data;
+using Boilerplate.MongoDB.Sample.Dtos;
+using Boilerplate.MongoDB.Sample.Models;
 
 namespace Boilerplate.MongoDB.Sample.Controllers
 {
@@ -12,12 +10,10 @@ namespace Boilerplate.MongoDB.Sample.Controllers
     [Route("api/[controller]")]
     public class CustomerController : ControllerBase
     {
-        private readonly ILogger<CustomerController> _logger;
         private readonly IRepository<Customer, string> _repository;
 
-        public CustomerController(ILogger<CustomerController> logger, IRepository<Customer, string> repository)
+        public CustomerController(IRepository<Customer, string> repository)
         {
-            _logger = logger;
             _repository = repository;
         }
 

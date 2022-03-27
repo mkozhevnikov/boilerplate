@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Boilerplate.Common.Data;
 
-namespace Boilerplate.MongoDB.Sample
+namespace Boilerplate.MongoDB.Sample.Models
 {
     public class Customer : IEntity<string>
     {
