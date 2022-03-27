@@ -1,7 +1,6 @@
-namespace Boilerplate.Common.Data
+namespace Boilerplate.Common.Data;
+
+public interface IEntity<TKey>
 {
-    public interface IEntity<TKey>
-    {
-        TKey Id { get; set; }
-    }
+    TKey Id { get; set; }
 }

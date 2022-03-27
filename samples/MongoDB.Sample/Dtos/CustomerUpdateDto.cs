@@ -1,10 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Boilerplate.MongoDB.Sample.Dtos
+namespace Boilerplate.MongoDB.Sample.Dtos;
+
+public class CustomerUpdateDto
 {
-    public class CustomerUpdateDto
-    {
-        [Required]
-        public string Name { get; set; }
-    }
+    [Required]
+    public string Name { get; set; }
 }
