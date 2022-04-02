@@ -60,10 +60,10 @@ Task("Test")
 
 Task("Pack")
     .Description("Creates NuGet packages and outputs them to the artifacts directory.")
-    .Does(() =>
+    .DoesForEach(GetFiles("./src/**/*.csproj"), project =>
     {
         DotNetPack(
-            ".",
+            project.ToString(),
             new DotNetPackSettings()
             {
                 Configuration = configuration,
