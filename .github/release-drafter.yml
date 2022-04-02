@@ -6,7 +6,6 @@
 # See https://github.com/release-drafter/release-drafter
 name-template: "$RESOLVED_VERSION"
 tag-template: "$RESOLVED_VERSION"
-change-template: "- $TITLE by @$AUTHOR (#$NUMBER)"
 no-changes-template: "- No changes"
 categories:
   - title: "📚 Documentation"
@@ -33,11 +32,9 @@ version-resolver:
       - "patch"
   default: patch
 template: |
+  ## Changes
+
   $CHANGES
-
-  ## 👨🏼‍💻 Contributors
-
-  $CONTRIBUTORS
 autolabeler:
   - label: "documentation"
     files:
