@@ -5,16 +5,18 @@ namespace Boilerplate.Common.Cache;
 
 public static class DistributedCacheExtensions
 {
+    private static readonly TimeSpan defaultExpiration = TimeSpan.FromMinutes(1);
+
     public static async ValueTask<T> GetOrSetAsync<T>(
         this IDistributedCache cache,
         string key,
         Func<Task<T>> valueFactory,
-        TimeSpan? expiresIn = null,
+        TimeSpan? expiresIn,
         JsonSerializerOptions? jsonSerializerOptions = null,
         CancellationToken token = default)
     {
         var options = new DistributedCacheEntryOptions {
-            AbsoluteExpirationRelativeToNow = expiresIn ?? TimeSpan.FromMinutes(1)
+            AbsoluteExpirationRelativeToNow = expiresIn ?? defaultExpiration
         };
 
         return await cache.GetOrSetAsync(key, valueFactory, options, jsonSerializerOptions, token);
@@ -59,9 +61,16 @@ public static class DistributedCacheExtensions
         this IDistributedCache cache,
         string key,
         T? value,
-        DistributedCacheEntryOptions? options = null,
-        CancellationToken token = default) =>
+        TimeSpan? expiresIn,
+        JsonSerializerOptions? jsonSerializerOptions = null,
+        CancellationToken token = default)
+    {
+        var options = new DistributedCacheEntryOptions {
+            AbsoluteExpirationRelativeToNow = expiresIn ?? defaultExpiration
+        };
+
         await cache.SetAsJsonAsync(key, value, options, null, token);
+    }
 
     public static async ValueTask SetAsJsonAsync<T>(
         this IDistributedCache cache,
@@ -71,6 +80,10 @@ public static class DistributedCacheExtensions
         JsonSerializerOptions? jsonSerializerOptions = null,
         CancellationToken token = default)
     {
+        options ??= new DistributedCacheEntryOptions {
+            AbsoluteExpirationRelativeToNow = defaultExpiration
+        };
+
         var bytes = JsonSerializer.SerializeToUtf8Bytes(value, jsonSerializerOptions);
 
         await cache.SetAsync(key, bytes, options, token);
