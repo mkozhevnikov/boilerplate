@@ -20,14 +20,30 @@ public static class Expressions
         }
     }
 
-    public static Expression<Func<T, bool>> Build<T>(Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2, Func<Expression, Expression, BinaryExpression> operation)
+    public static Expression<Func<T, bool>> Build<T>(
+        Expression<Func<T, bool>> expr1,
+        Expression<Func<T, bool>> expr2,
+        Func<Expression, Expression, BinaryExpression> operation)
     {
         var visitor = new ParameterExpressionVisitor();
-        var result = operation(expr1.Body, visitor.ReplaceParameter(expr2.Body, expr2.Parameters[0], expr1.Parameters[0]));
+        var result = operation(expr1.Body,
+            visitor.ReplaceParameter(expr2.Body, expr2.Parameters[0], expr1.Parameters[0]));
         return Expression.Lambda<Func<T, bool>>(result, expr1.Parameters[0]);
     }
 
-    public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2) => Build(expr1, expr2, Expression.AndAlso);
+    public static Expression<Func<T, bool>> And<T>(
+        this Expression<Func<T, bool>> expr1,
+        Expression<Func<T, bool>> expr2) =>
+        Build(expr1, expr2, Expression.AndAlso);
 
-    public static Expression<Func<T, bool>> Or<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2) => Build(expr1, expr2, Expression.OrElse);
+    public static Expression<Func<T, bool>> Or<T>(
+        this Expression<Func<T, bool>> expr1,
+        Expression<Func<T, bool>> expr2) =>
+        Build(expr1, expr2, Expression.OrElse);
+
+    public static Expression<Func<T, bool>> Not<T>(this Expression<Func<T, bool>> expr)
+    {
+        var negated = Expression.Not(expr.Body);
+        return Expression.Lambda<Func<T, bool>>(negated, expr.Parameters);
+    }
 }

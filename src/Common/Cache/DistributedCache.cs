@@ -3,7 +3,7 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace Boilerplate.Common.Cache;
 
-public static class DistributedCacheExtensions
+public static class DistributedCache
 {
     private static readonly TimeSpan defaultExpiration = TimeSpan.FromMinutes(1);
 
