@@ -49,7 +49,7 @@ public static class DistributedCacheExtensions
     public static async ValueTask<T?> GetAsJsonAsync<T>(
         this IDistributedCache cache,
         string key,
-        JsonSerializerOptions? jsonSerializerOptions = null,
+        JsonSerializerOptions? jsonSerializerOptions,
         CancellationToken token = default)
     {
         var bytes = await cache.GetAsync(key, token);

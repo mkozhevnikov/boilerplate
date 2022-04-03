@@ -88,6 +88,44 @@ public class DistributedCacheTests
         sut.Should().BeFalse();
     }
 
+    [Fact]
+    public async Task MemoryCache_GetAsJson_DeserializedToModel()
+    {
+        var key = "k7";
+        var value =
+        @"{
+          ""IntProp"": 123,
+          ""DateTimeProp"": ""2022-04-02""
+        }";
+        await cache.SetAsync(key, Encoding.UTF8.GetBytes(value));
+
+        var sut = await cache.GetAsJsonAsync<TestModel>(key);
+
+        sut.Should().NotBeNull();
+        sut!.IntProp.Should().Be(123);
+        sut.DateTimeProp.Should().Be(new DateTime(2022, 4, 2));
+    }
+
+    [Fact]
+    public async Task MemoryCache_GetAsJson_ReadCaseInsensitive_DeserializedToModel()
+    {
+        var key = "k8";
+        var value =
+        @"{
+          ""intProp"": 123,
+          ""datetimeprop"": ""2022-04-02""
+        }";
+        await cache.SetAsync(key, Encoding.UTF8.GetBytes(value));
+
+        var sut = await cache.GetAsJsonAsync<TestModel>(key, new JsonSerializerOptions {
+            PropertyNameCaseInsensitive = true
+        });
+
+        sut.Should().NotBeNull();
+        sut!.IntProp.Should().Be(123);
+        sut.DateTimeProp.Should().Be(new DateTime(2022, 4, 2));
+    }
+
     private readonly IDistributedCache cache;
 
     public DistributedCacheTests()
@@ -104,7 +142,7 @@ public class DistributedCacheTests
         public int IntProp { get; set; }
         public decimal DecimalProp { get; set; }
         public double DoubleProp { get; set; }
-        public string StringProp { get; set; }
+        public string StringProp { get; set; } = null!;
         public DateTime DateTimeProp { get; set; }
     }
 }
