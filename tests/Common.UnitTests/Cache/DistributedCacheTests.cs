@@ -126,6 +126,51 @@ public class DistributedCacheTests
         sut.DateTimeProp.Should().Be(new DateTime(2022, 4, 2));
     }
 
+    [Fact]
+    public async Task MemoryCache_GetOrSet_DefaultOptions_CreateValue()
+    {
+        var key = "k9";
+        var model = new TestModel {
+            IntProp = 123
+        };
+
+        var sut = await cache.GetOrSetAsync(key, model, TimeSpan.FromMinutes(5));
+
+        sut.Should().NotBeNull();
+        sut!.IntProp.Should().Be(model.IntProp);
+    }
+
+    [Fact]
+    public async Task MemoryCache_GetOrSet_UseFactory_CreateValue()
+    {
+        var key = "k10";
+        var model = new TestModel {
+            IntProp = 123
+        };
+
+        var sut = await cache.GetOrSetAsync(key, () => Task.FromResult((TestModel?)model), TimeSpan.FromMinutes(5));
+
+        sut.Should().NotBeNull();
+        sut!.IntProp.Should().Be(model.IntProp);
+    }
+
+    [Fact]
+    public async Task MemoryCache_GetOrSet_ValueExists_GetValue()
+    {
+        var key = "k11";
+        var model = new TestModel {
+            IntProp = 123
+        };
+        await cache.SetAsync(key, Encoding.UTF8.GetBytes(JsonSerializer.Serialize(model)));
+        model.DoubleProp = 2d;
+
+        var sut = await cache.GetOrSetAsync(key, model, TimeSpan.FromMinutes(5));
+
+        sut.Should().NotBeNull();
+        sut!.IntProp.Should().Be(model.IntProp);
+        sut.DoubleProp.Should().NotBe(model.DoubleProp);
+    }
+
     private readonly IDistributedCache cache;
 
     public DistributedCacheTests()

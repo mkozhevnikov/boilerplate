@@ -7,10 +7,19 @@ public static class DistributedCacheExtensions
 {
     private static readonly TimeSpan defaultExpiration = TimeSpan.FromMinutes(1);
 
-    public static async ValueTask<T> GetOrSetAsync<T>(
+    public static async ValueTask<T?> GetOrSetAsync<T>(
         this IDistributedCache cache,
         string key,
-        Func<Task<T>> valueFactory,
+        T? value,
+        TimeSpan? expiresIn,
+        JsonSerializerOptions? jsonSerializerOptions = null,
+        CancellationToken token = default) =>
+        await cache.GetOrSetAsync(key, () => Task.FromResult(value), expiresIn, jsonSerializerOptions, token);
+
+    public static async ValueTask<T?> GetOrSetAsync<T>(
+        this IDistributedCache cache,
+        string key,
+        Func<Task<T?>> valueFactory,
         TimeSpan? expiresIn,
         JsonSerializerOptions? jsonSerializerOptions = null,
         CancellationToken token = default)
@@ -22,10 +31,10 @@ public static class DistributedCacheExtensions
         return await cache.GetOrSetAsync(key, valueFactory, options, jsonSerializerOptions, token);
     }
 
-    public static async ValueTask<T> GetOrSetAsync<T>(
+    public static async ValueTask<T?> GetOrSetAsync<T>(
         this IDistributedCache cache,
         string key,
-        Func<Task<T>> valueFactory,
+        Func<Task<T?>> valueFactory,
         DistributedCacheEntryOptions? options = null,
         JsonSerializerOptions? jsonSerializerOptions = null,
         CancellationToken token = default)
