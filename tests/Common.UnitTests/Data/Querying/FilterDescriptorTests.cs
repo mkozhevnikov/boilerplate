@@ -9,7 +9,7 @@ namespace Boilerplate.Common.UnitTests.Data.Querying;
 public class FilterDescriptorTests
 {
     [Fact]
-    public void FilterDescriptor_Basic_Serialized()
+    public void FilterDescriptor_Serialize_Basic()
     {
         var filter = new FilterDescriptor {
             Field = "name",
@@ -26,7 +26,15 @@ public class FilterDescriptorTests
     }
 
     [Fact]
-    public void FilterDescriptor_Basic_Deserialized()
+    public void FilterDescriptor_Deserialize_Default()
+    {
+        var deserializedFilter = JsonConvert.DeserializeObject<FilterDescriptor>(string.Empty);
+
+        deserializedFilter.Should().BeNull();
+    }
+
+    [Fact]
+    public void FilterDescriptor_Deserialize_Basic()
     {
         var filter = new {
             Field = "name",
@@ -34,11 +42,11 @@ public class FilterDescriptorTests
             Value = "John Doe"
         };
 
-        var deserializeFilter = JsonConvert.DeserializeObject<FilterDescriptor>(filter.ToJson());
+        var deserializedFilter = JsonConvert.DeserializeObject<FilterDescriptor>(filter.ToJson());
 
-        deserializeFilter.Should().NotBeNull();
-        deserializeFilter!.Field.Should().Be(filter.Field);
-        deserializeFilter.Operator.Should().Be(filter.Operator);
-        deserializeFilter.Value.Should().Be(filter.Value);
+        deserializedFilter.Should().NotBeNull();
+        deserializedFilter.Field.Should().Be(filter.Field);
+        deserializedFilter.Operator.Should().Be(filter.Operator);
+        deserializedFilter.Value.Should().Be(filter.Value);
     }
 }

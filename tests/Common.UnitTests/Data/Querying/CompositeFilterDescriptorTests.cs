@@ -9,24 +9,7 @@ namespace Boilerplate.Common.UnitTests.Data.Querying;
 public class CompositeFilterDescriptorTests
 {
     [Fact]
-    public void CompositeFilterDescriptor_Inheritance_Serialized()
-    {
-        var filter = new CompositeFilterDescriptor {
-            Field = "name",
-            Operator = "eq",
-            Value = "John Doe"
-        };
-
-        var serializedFilter = JsonConvert.SerializeObject(filter);
-
-        serializedFilter.Should().NotBeEmpty();
-        serializedFilter.Should().Contain($"\"Field\":\"{filter.Field}\"");
-        serializedFilter.Should().Contain($"\"Operator\":\"{filter.Operator}\"");
-        serializedFilter.Should().Contain($"\"Value\":\"{filter.Value}\"");
-    }
-
-    [Fact]
-    public void CompositeFilterDescriptor_Basic_Serialized()
+    public void CompositeFilterDescriptor_Serialize_Basic()
     {
         var filter = new CompositeFilterDescriptor {
             Logic = "and",
@@ -45,24 +28,32 @@ public class CompositeFilterDescriptorTests
     }
 
     [Fact]
-    public void CompositeFilterDescriptor_Inheritance_Deserialized()
+    public void CompositeFilterDescriptor_Serialize_Inheritance()
     {
-        var filter = new {
+        var filter = new CompositeFilterDescriptor {
             Field = "name",
             Operator = "eq",
             Value = "John Doe"
         };
 
-        var deserializeFilter = JsonConvert.DeserializeObject<CompositeFilterDescriptor>(filter.ToJson());
+        var serializedFilter = JsonConvert.SerializeObject(filter);
 
-        deserializeFilter.Should().NotBeNull();
-        deserializeFilter!.Field.Should().Be(filter.Field);
-        deserializeFilter.Operator.Should().Be(filter.Operator);
-        deserializeFilter.Value.Should().Be(filter.Value);
+        serializedFilter.Should().NotBeEmpty();
+        serializedFilter.Should().Contain($"\"Field\":\"{filter.Field}\"");
+        serializedFilter.Should().Contain($"\"Operator\":\"{filter.Operator}\"");
+        serializedFilter.Should().Contain($"\"Value\":\"{filter.Value}\"");
     }
 
     [Fact]
-    public void CompositeFilterDescriptor_Basic_Deserialized()
+    public void CompositeFilterDescriptor_Deserialize_Default()
+    {
+        var deserializeFilter = JsonConvert.DeserializeObject<CompositeFilterDescriptor>(string.Empty);
+
+        deserializeFilter.Should().BeNull();
+    }
+
+    [Fact]
+    public void CompositeFilterDescriptor_Deserialize_Basic()
     {
         var filter = new CompositeFilterDescriptor {
             Logic = "and",
@@ -73,16 +64,33 @@ public class CompositeFilterDescriptorTests
             }
         };
 
-        var deserializeFilter = JsonConvert.DeserializeObject<CompositeFilterDescriptor>(filter.ToJson());
+        var deserializedFilter = JsonConvert.DeserializeObject<CompositeFilterDescriptor>(filter.ToJson());
 
-        deserializeFilter.Should().NotBeNull();
-        deserializeFilter!.Logic.Should().Be(filter.Logic);
-        deserializeFilter.Filters.Should().HaveCount(1);
-        deserializeFilter.Filters.Single().Operator.Should().Be(filter.Filters.Single().Operator);
+        deserializedFilter.Should().NotBeNull();
+        deserializedFilter.Logic.Should().Be(filter.Logic);
+        deserializedFilter.Filters.Should().HaveCount(1);
+        deserializedFilter.Filters.Single().Operator.Should().Be(filter.Filters.Single().Operator);
     }
 
     [Fact]
-    public void CompositeFilterDescriptor_MultiLevel_Deserialized()
+    public void CompositeFilterDescriptor_Deserialize_Inheritance()
+    {
+        var filter = new {
+            Field = "name",
+            Operator = "eq",
+            Value = "John Doe"
+        };
+
+        var deserializedFilter = JsonConvert.DeserializeObject<CompositeFilterDescriptor>(filter.ToJson());
+
+        deserializedFilter.Should().NotBeNull();
+        deserializedFilter.Field.Should().Be(filter.Field);
+        deserializedFilter.Operator.Should().Be(filter.Operator);
+        deserializedFilter.Value.Should().Be(filter.Value);
+    }
+
+    [Fact]
+    public void CompositeFilterDescriptor_Deserialize_MultiLevel()
     {
         var filter = new CompositeFilterDescriptor {
             Logic = "and",
@@ -99,12 +107,12 @@ public class CompositeFilterDescriptorTests
         };
 
         var value = filter.ToJson();
-        var deserializeFilter = JsonConvert.DeserializeObject<CompositeFilterDescriptor>(value);
+        var deserializedFilter = JsonConvert.DeserializeObject<CompositeFilterDescriptor>(value);
 
-        deserializeFilter.Should().NotBeNull();
-        deserializeFilter!.Logic.Should().Be(filter.Logic);
-        deserializeFilter.Filters.Should().HaveCount(1);
-        var nestedFilter = deserializeFilter.Filters.Single() as CompositeFilterDescriptor;
+        deserializedFilter.Should().NotBeNull();
+        deserializedFilter.Logic.Should().Be(filter.Logic);
+        deserializedFilter.Filters.Should().HaveCount(1);
+        var nestedFilter = deserializedFilter.Filters.Single() as CompositeFilterDescriptor;
         nestedFilter.Should().NotBeNull();
         nestedFilter!.Operator.Should().BeNull();
         nestedFilter.Logic.Should().Be(((CompositeFilterDescriptor)filter.Filters.Single()).Logic);
