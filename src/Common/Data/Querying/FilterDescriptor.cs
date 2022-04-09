@@ -10,6 +10,7 @@ namespace Boilerplate.Common.Data.Querying;
 [JsonSubtypes.KnownSubTypeWithPropertyAttribute(
     typeof(CompositeFilterDescriptor), nameof(CompositeFilterDescriptor.Logic))]
 [JsonSubtypes.KnownSubTypeWithPropertyAttribute(typeof(FilterDescriptor), nameof(Operator))]
+[JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
 public class FilterDescriptor
 {
     /// <summary>
