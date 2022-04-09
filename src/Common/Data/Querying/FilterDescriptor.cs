@@ -1,3 +1,4 @@
+using Ardalis.SmartEnum.JsonNet;
 using JsonSubTypes;
 using Newtonsoft.Json;
 
@@ -21,7 +22,8 @@ public class FilterDescriptor
     /// <summary>
     /// The filter operator (comparison).
     /// </summary>
-    public string Operator { get; set; }
+    [JsonConverter(typeof(SmartEnumNameConverter<OperatorEnum, int>))]
+    public OperatorEnum Operator { get; set; }
 
     /// <summary>
     /// The value to which the field is compared. Has to be of the same type as the field.

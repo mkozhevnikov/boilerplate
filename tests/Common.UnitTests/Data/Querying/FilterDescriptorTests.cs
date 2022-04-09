@@ -13,7 +13,7 @@ public class FilterDescriptorTests
     {
         var filter = new FilterDescriptor {
             Field = "name",
-            Operator = "eq",
+            Operator = OperatorEnum.EqualTo,
             Value = "John Doe"
         };
 
@@ -45,8 +45,8 @@ public class FilterDescriptorTests
         var deserializedFilter = JsonConvert.DeserializeObject<FilterDescriptor>(filter.ToJson());
 
         deserializedFilter.Should().NotBeNull();
-        deserializedFilter.Field.Should().Be(filter.Field);
-        deserializedFilter.Operator.Should().Be(filter.Operator);
+        deserializedFilter!.Field.Should().Be(filter.Field);
+        deserializedFilter.Operator.Should().Be(OperatorEnum.FromName(filter.Operator));
         deserializedFilter.Value.Should().Be(filter.Value);
     }
 }

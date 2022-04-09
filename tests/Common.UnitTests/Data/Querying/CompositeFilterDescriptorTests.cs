@@ -12,10 +12,10 @@ public class CompositeFilterDescriptorTests
     public void CompositeFilterDescriptor_Serialize_Basic()
     {
         var filter = new CompositeFilterDescriptor {
-            Logic = "and",
+            Logic = LogicEnum.And,
             Filters = new [] {
                 new FilterDescriptor {
-                    Operator = "eq"
+                    Operator = OperatorEnum.EqualTo
                 }
             }
         };
@@ -32,7 +32,7 @@ public class CompositeFilterDescriptorTests
     {
         var filter = new CompositeFilterDescriptor {
             Field = "name",
-            Operator = "eq",
+            Operator = OperatorEnum.EqualTo,
             Value = "John Doe"
         };
 
@@ -56,10 +56,10 @@ public class CompositeFilterDescriptorTests
     public void CompositeFilterDescriptor_Deserialize_Basic()
     {
         var filter = new CompositeFilterDescriptor {
-            Logic = "and",
+            Logic = LogicEnum.And,
             Filters = new [] {
                 new FilterDescriptor {
-                    Operator = "eq"
+                    Operator = OperatorEnum.EqualTo
                 }
             }
         };
@@ -67,7 +67,7 @@ public class CompositeFilterDescriptorTests
         var deserializedFilter = JsonConvert.DeserializeObject<CompositeFilterDescriptor>(filter.ToJson());
 
         deserializedFilter.Should().NotBeNull();
-        deserializedFilter.Logic.Should().Be(filter.Logic);
+        deserializedFilter!.Logic.Should().Be(filter.Logic);
         deserializedFilter.Filters.Should().HaveCount(1);
         deserializedFilter.Filters.Single().Operator.Should().Be(filter.Filters.Single().Operator);
     }
@@ -84,8 +84,8 @@ public class CompositeFilterDescriptorTests
         var deserializedFilter = JsonConvert.DeserializeObject<CompositeFilterDescriptor>(filter.ToJson());
 
         deserializedFilter.Should().NotBeNull();
-        deserializedFilter.Field.Should().Be(filter.Field);
-        deserializedFilter.Operator.Should().Be(filter.Operator);
+        deserializedFilter!.Field.Should().Be(filter.Field);
+        deserializedFilter.Operator.Should().Be(OperatorEnum.FromName(filter.Operator));
         deserializedFilter.Value.Should().Be(filter.Value);
     }
 
@@ -93,13 +93,13 @@ public class CompositeFilterDescriptorTests
     public void CompositeFilterDescriptor_Deserialize_MultiLevel()
     {
         var filter = new CompositeFilterDescriptor {
-            Logic = "and",
+            Logic = LogicEnum.And,
             Filters = new [] {
                 new CompositeFilterDescriptor {
-                    Logic = "or",
+                    Logic = LogicEnum.Or,
                     Filters = new [] {
                         new FilterDescriptor {
-                            Operator = "eq"
+                            Operator = OperatorEnum.EqualTo
                         }
                     }
                 }
@@ -110,7 +110,7 @@ public class CompositeFilterDescriptorTests
         var deserializedFilter = JsonConvert.DeserializeObject<CompositeFilterDescriptor>(value);
 
         deserializedFilter.Should().NotBeNull();
-        deserializedFilter.Logic.Should().Be(filter.Logic);
+        deserializedFilter!.Logic.Should().Be(filter.Logic);
         deserializedFilter.Filters.Should().HaveCount(1);
         var nestedFilter = deserializedFilter.Filters.Single() as CompositeFilterDescriptor;
         nestedFilter.Should().NotBeNull();
