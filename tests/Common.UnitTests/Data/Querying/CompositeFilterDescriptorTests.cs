@@ -12,10 +12,10 @@ public class CompositeFilterDescriptorTests
     public void CompositeFilterDescriptor_Serialize_Basic()
     {
         var filter = new CompositeFilterDescriptor {
-            Logic = LogicEnum.And,
+            Logic = Logic.And,
             Filters = new [] {
                 new FilterDescriptor {
-                    Operator = OperatorEnum.EqualTo
+                    Operator = Operator.EqualTo
                 }
             }
         };
@@ -32,7 +32,7 @@ public class CompositeFilterDescriptorTests
     {
         var filter = new CompositeFilterDescriptor {
             Field = "name",
-            Operator = OperatorEnum.EqualTo,
+            Operator = Operator.EqualTo,
             Value = "John Doe"
         };
 
@@ -56,10 +56,10 @@ public class CompositeFilterDescriptorTests
     public void CompositeFilterDescriptor_Deserialize_Basic()
     {
         var filter = new CompositeFilterDescriptor {
-            Logic = LogicEnum.And,
+            Logic = Logic.And,
             Filters = new [] {
                 new FilterDescriptor {
-                    Operator = OperatorEnum.EqualTo
+                    Operator = Operator.EqualTo
                 }
             }
         };
@@ -85,7 +85,7 @@ public class CompositeFilterDescriptorTests
 
         deserializedFilter.Should().NotBeNull();
         deserializedFilter!.Field.Should().Be(filter.Field);
-        deserializedFilter.Operator.Should().Be(OperatorEnum.FromName(filter.Operator));
+        deserializedFilter.Operator.Should().Be(Operator.FromName(filter.Operator));
         deserializedFilter.Value.Should().Be(filter.Value);
     }
 
@@ -93,13 +93,13 @@ public class CompositeFilterDescriptorTests
     public void CompositeFilterDescriptor_Deserialize_MultiLevel()
     {
         var filter = new CompositeFilterDescriptor {
-            Logic = LogicEnum.And,
+            Logic = Logic.And,
             Filters = new [] {
                 new CompositeFilterDescriptor {
-                    Logic = LogicEnum.Or,
+                    Logic = Logic.Or,
                     Filters = new [] {
                         new FilterDescriptor {
-                            Operator = OperatorEnum.EqualTo
+                            Operator = Operator.EqualTo
                         }
                     }
                 }
