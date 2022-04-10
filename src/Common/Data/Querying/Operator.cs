@@ -23,73 +23,71 @@ public abstract class Operator : SmartEnum<Operator>
     public static readonly Operator GreaterThan = new GreaterThanOperator();
     public static readonly Operator GreaterThanOrEqualTo = new GreaterThanOrEqualToOperator();
 
-    public abstract Expression CreateExpression(Expression left, Expression right);
+    public abstract Expression CreateExpression(Expression property, Expression value);
 
-    protected Operator(string name, int value) : base(name, value)
-    {
-    }
+    protected Operator(string name, int value) : base(name, value) {}
 
     private sealed class EqualToOperator : Operator
     {
         public EqualToOperator() : base(equalTo, 1) {}
 
-        public override Expression CreateExpression(Expression left, Expression right) =>
-            Expression.Equal(left, right);
+        public override Expression CreateExpression(Expression property, Expression value) =>
+            Expression.Equal(property, value);
     }
 
     private sealed class NotEqualToOperator : Operator
     {
         public NotEqualToOperator() : base(notEqual, 2) {}
 
-        public override Expression CreateExpression(Expression left, Expression right) =>
-            Expression.NotEqual(left, right);
+        public override Expression CreateExpression(Expression property, Expression value) =>
+            Expression.NotEqual(property, value);
     }
 
     private sealed class IsNullOperator : Operator
     {
         public IsNullOperator() : base(isNull, 3) {}
 
-        public override Expression CreateExpression(Expression left, Expression right) =>
-            Expression.Equal(left, Expression.Constant(null, typeof(object)));
+        public override Expression CreateExpression(Expression property, Expression value) =>
+            Expression.Equal(property, Expression.Constant(null, typeof(object)));
     }
 
     private sealed class IsNotNullOperator : Operator
     {
         public IsNotNullOperator() : base(isNotNull, 4) {}
 
-        public override Expression CreateExpression(Expression left, Expression right) =>
-            Expression.NotEqual(left, Expression.Constant(null, typeof(object)));
+        public override Expression CreateExpression(Expression property, Expression value) =>
+            Expression.NotEqual(property, Expression.Constant(null, typeof(object)));
     }
 
     private sealed class LessThanOperator : Operator
     {
         public LessThanOperator() : base(lessThan, 5) {}
 
-        public override Expression CreateExpression(Expression left, Expression right) =>
-            Expression.LessThan(left, right);
+        public override Expression CreateExpression(Expression property, Expression value) =>
+            Expression.LessThan(property, value);
     }
 
     private sealed class LessThanOrEqualToOperator : Operator
     {
         public LessThanOrEqualToOperator() : base(lessThanOrEqualTo, 6) {}
 
-        public override Expression CreateExpression(Expression left, Expression right) =>
-            Expression.LessThanOrEqual(left, right);
+        public override Expression CreateExpression(Expression property, Expression value) =>
+            Expression.LessThanOrEqual(property, value);
     }
 
     private sealed class GreaterThanOperator : Operator
     {
         public GreaterThanOperator() : base(greaterThan, 7) {}
 
-        public override Expression CreateExpression(Expression left, Expression right) =>
-            Expression.GreaterThan(left, right);
+        public override Expression CreateExpression(Expression property, Expression value) =>
+            Expression.GreaterThan(property, value);
     }
 
     private sealed class GreaterThanOrEqualToOperator : Operator
     {
         public GreaterThanOrEqualToOperator() : base(greaterThanOrEqualTo, 8) {}
 
-        public override Expression CreateExpression(Expression left, Expression right) =>
-            Expression.GreaterThanOrEqual(left, right);
+        public override Expression CreateExpression(Expression property, Expression value) =>
+            Expression.GreaterThanOrEqual(property, value);
     }
 }
