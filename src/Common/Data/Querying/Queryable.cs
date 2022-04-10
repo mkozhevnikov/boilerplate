@@ -42,7 +42,7 @@ public static class Queryable
             throw new InvalidOperationException("Can't apply ordering. Types mismatch");
         }
 
-        var param = Expression.Parameter(componentType, "x");
+        var param = Expression.Parameter(componentType);
         var property = Expression.Property(param, propertyDescriptor.Name);
         var lambda = Expression.Lambda(property, param);
 
