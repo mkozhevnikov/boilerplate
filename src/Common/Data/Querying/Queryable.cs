@@ -21,16 +21,12 @@ public static class Queryable
     public static IQueryable<T> OrderBy<T>(
         this IQueryable<T> query,
         ListSortDescription sort) =>
-        query.OrderBy(sort.PropertyDescriptor, sort.SortDirection == ListSortDirection.Ascending
-            ? nameof(System.Linq.Queryable.OrderBy)
-            : nameof(System.Linq.Queryable.OrderByDescending));
+        query.OrderBy(sort.PropertyDescriptor, ((SortEnum)sort.SortDirection).OrderByMethod);
 
     public static IQueryable<T> ThenBy<T>(
         this IQueryable<T> query,
         ListSortDescription sort) =>
-        query.OrderBy(sort.PropertyDescriptor, sort.SortDirection == ListSortDirection.Ascending
-            ? nameof(System.Linq.Queryable.ThenBy)
-            : nameof(System.Linq.Queryable.ThenByDescending));
+        query.OrderBy(sort.PropertyDescriptor, ((SortEnum)sort.SortDirection).ThenByMethod);
 
     private static IQueryable<T> OrderBy<T>(
         this IQueryable<T> query,
@@ -46,6 +42,7 @@ public static class Queryable
         var property = Expression.Property(param, propertyDescriptor.Name);
         var lambda = Expression.Lambda(property, param);
 
+        // represents System.Linq.Queryable.OrderBy<T>((T t) => t.Property)
         return query.Provider.CreateQuery<T>(Expression.Call(
             typeof(System.Linq.Queryable),
             sortMethod,
