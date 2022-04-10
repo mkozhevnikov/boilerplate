@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace Boilerplate.Common.Data.Querying;
 
@@ -14,6 +15,7 @@ public interface IPagedListRequest : IListRequest
 
 public interface ISortedListRequest : IListRequest
 {
+    [JsonConverter(typeof(SortDescriptorConverter))]
     ListSortDescriptionCollection Sort { get; set; }
 }
 

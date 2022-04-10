@@ -10,4 +10,11 @@ public static class JsonExtensions
     {
         return JsonConvert.SerializeObject(source, formatting, serializerSettings);
     }
+
+    public static string ToJson(this object source,
+        Formatting formatting = Formatting.None,
+        params JsonConverter[] converters)
+    {
+        return JsonConvert.SerializeObject(source, formatting, converters);
+    }
 }
