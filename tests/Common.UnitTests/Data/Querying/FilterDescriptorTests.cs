@@ -1,3 +1,4 @@
+using System.Collections;
 using Boilerplate.Common.Data.Querying;
 using Boilerplate.Common.Utils;
 using FluentAssertions;
@@ -48,5 +49,145 @@ public class FilterDescriptorTests
         deserializedFilter!.Field.Should().Be(filter.Field);
         deserializedFilter.Operator.Should().Be(Operator.FromName(filter.Operator));
         deserializedFilter.Value.Should().Be(filter.Value);
+    }
+
+    private record IntComparison(int Value, int CompareTo, Operator Operator);
+
+    private class PositiveIntComparison : IEnumerable<object[]>
+    {
+        public IEnumerator<object[]> GetEnumerator() =>
+            IntComparisons().Select(c => new object[] { c.Value, c.CompareTo, c.Operator }).GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        private static IEnumerable<IntComparison> IntComparisons()
+        {
+            yield return new IntComparison(10, 10, Operator.EqualTo);
+            yield return new IntComparison(10, 5, Operator.NotEqualTo);
+            yield return new IntComparison(10, 20, Operator.LessThan);
+            yield return new IntComparison(10, 30, Operator.LessThanOrEqualTo);
+            yield return new IntComparison(10, 10, Operator.LessThanOrEqualTo);
+            yield return new IntComparison(10, 5, Operator.GreaterThan);
+            yield return new IntComparison(10, 1, Operator.GreaterThanOrEqualTo);
+            yield return new IntComparison(10, 10, Operator.GreaterThanOrEqualTo);
+        }
+    }
+
+    private class NegativeIntComparison : IEnumerable<object[]>
+    {
+        public IEnumerator<object[]> GetEnumerator() =>
+            IntComparisons().Select(c => new object[] { c.Value, c.CompareTo, c.Operator }).GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        private static IEnumerable<IntComparison> IntComparisons()
+        {
+            yield return new IntComparison(10, 20, Operator.EqualTo);
+            yield return new IntComparison(10, 10, Operator.NotEqualTo);
+            yield return new IntComparison(10, 5, Operator.LessThan);
+            yield return new IntComparison(10, 5, Operator.LessThanOrEqualTo);
+            yield return new IntComparison(10, 20, Operator.GreaterThan);
+            yield return new IntComparison(10, 20, Operator.GreaterThanOrEqualTo);
+        }
+    }
+
+    [Theory]
+    [ClassData(typeof(PositiveIntComparison))]
+    public void FilterDescriptor_Expression_IntComparison_Positive(int value, int compareTo, Operator op)
+    {
+        var testValue = new TestValueType(1, value);
+        var filter = new FilterDescriptor {
+            Field = nameof(TestValueType.Value),
+            Operator = op,
+            Value = compareTo
+        };
+
+        var predicate = filter.ToExpression<TestValueType>();
+
+        predicate.Compile().Invoke(testValue).Should().BeTrue();
+    }
+
+    [Theory]
+    [ClassData(typeof(NegativeIntComparison))]
+    public void FilterDescriptor_Expression_IntComparison_Negative(int value, int compareTo, Operator op)
+    {
+        var testValue = new TestValueType(1, value);
+        var filter = new FilterDescriptor {
+            Field = nameof(TestValueType.Value),
+            Operator = op,
+            Value = compareTo
+        };
+
+        var predicate = filter.ToExpression<TestValueType>();
+
+        predicate.Compile().Invoke(testValue).Should().BeFalse();
+    }
+
+    private record NullableValue(int? Value);
+
+    private record NullableComparison(int? Value, Operator Operator);
+
+    private class PositiveNullableComparison : IEnumerable<object[]>
+    {
+        public IEnumerator<object[]> GetEnumerator() =>
+            NullableComparisons().Select(c => new object[] { c.Value!, c.Operator }).GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        private static IEnumerable<NullableComparison> NullableComparisons()
+        {
+            yield return new NullableComparison(null, Operator.EqualTo);
+            yield return new NullableComparison(10, Operator.NotEqualTo);
+            yield return new NullableComparison(null, Operator.IsNull);
+            yield return new NullableComparison(10, Operator.IsNotNull);
+        }
+    }
+
+    private class NegativeNullableComparison : IEnumerable<object[]>
+    {
+        public IEnumerator<object[]> GetEnumerator() =>
+            NullableComparisons().Select(c => new object[] { c.Value!, c.Operator }).GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        private static IEnumerable<NullableComparison> NullableComparisons()
+        {
+            yield return new NullableComparison(10, Operator.EqualTo);
+            yield return new NullableComparison(null, Operator.NotEqualTo);
+            yield return new NullableComparison(10, Operator.IsNull);
+            yield return new NullableComparison(null, Operator.IsNotNull);
+        }
+    }
+
+    [Theory]
+    [ClassData(typeof(PositiveNullableComparison))]
+    public void FilterDescriptor_Expression_Nullable_Positive(int? value, Operator op)
+    {
+        var testValue = new NullableValue(value);
+        var filter = new FilterDescriptor {
+            Field = nameof(NullableValue.Value),
+            Operator = op,
+            Value = null
+        };
+
+        var predicate = filter.ToExpression<NullableValue>();
+
+        predicate.Compile().Invoke(testValue).Should().BeTrue();
+    }
+
+    [Theory]
+    [ClassData(typeof(NegativeNullableComparison))]
+    public void FilterDescriptor_Expression_Nullable_Negative(int? value, Operator op)
+    {
+        var testValue = new NullableValue(value);
+        var filter = new FilterDescriptor {
+            Field = nameof(TestValueType.Value),
+            Operator = op,
+            Value = null
+        };
+
+        var predicate = filter.ToExpression<NullableValue>();
+
+        predicate.Compile().Invoke(testValue).Should().BeFalse();
     }
 }
