@@ -2,6 +2,7 @@ using System.Collections;
 using System.Linq.Expressions;
 using Ardalis.SmartEnum;
 using Boilerplate.Common.Utils;
+using Newtonsoft.Json.Linq;
 using Enumerable = System.Linq.Enumerable;
 
 namespace Boilerplate.Common.Data.Querying;
@@ -103,12 +104,11 @@ public abstract class Operator : SmartEnum<Operator>
         public override Expression CreateExpression(Expression property, Expression value)
         {
             var memberReturnType = property.GetMemberReturnType();
-            if (!memberReturnType.IsValueType) {
-                return Expression.Call(
-                    Expression.Constant(((ConstantExpression)value).Value, typeof(IList)),
-                    nameof(IList.Contains),
-                    null,
-                    property);
+            var filterValue = ((ConstantExpression)value).Value;
+
+            if (filterValue is JArray jArray) {
+                var listFilter = jArray.ToObject(typeof(List<>).MakeGenericType(memberReturnType));
+                value = Expression.Constant(listFilter);
             }
 
             var containsMethod = typeof(Enumerable).GetMethods()

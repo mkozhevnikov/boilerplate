@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq.Expressions;
+using Ardalis.SmartEnum.JsonNet;
 using Boilerplate.Common.Data.Querying;
 using Boilerplate.Common.Utils;
 using FluentAssertions;
@@ -308,5 +309,39 @@ public class FilterDescriptorTests
         var predicate = filter.ToExpression<TestValueType>();
 
         predicate.Compile().Invoke(testValue).Should().BeFalse();
+    }
+
+    [Fact]
+    public void FilterDescriptor_Deserialized_Expression_Int_InArray()
+    {
+        var testValue = new TestValueType(1, 10);
+        var payload = new {
+            Field = nameof(TestValueType.Value),
+            Operator = Operator.In,
+            Value = new[] { 10, 20 }
+        };
+        var filter = JsonConvert.DeserializeObject<FilterDescriptor>(
+            payload.ToJson(converters: new SmartEnumNameConverter<Operator, int>()));
+
+        var predicate = filter!.ToExpression<TestValueType>();
+
+        predicate.Compile().Invoke(testValue).Should().BeTrue();
+    }
+
+    [Fact]
+    public void FilterDescriptor_Deserialized_Expression_String_InArray()
+    {
+        var testValue = new StringValue("Foo");
+        var payload = new {
+            Field = nameof(StringValue.Value),
+            Operator = Operator.In,
+            Value = new[] { "Foo", "Bar" }
+        };
+        var filter = JsonConvert.DeserializeObject<FilterDescriptor>(
+            payload.ToJson(converters: new SmartEnumNameConverter<Operator, int>()));
+
+        var predicate = filter!.ToExpression<StringValue>();
+
+        predicate.Compile().Invoke(testValue).Should().BeTrue();
     }
 }
