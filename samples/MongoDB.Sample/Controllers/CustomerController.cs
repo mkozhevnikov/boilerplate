@@ -1,9 +1,9 @@
-﻿namespace Boilerplate.MongoDB.Sample.Controllers;
-
-using Common.Data;
-using Dtos;
+﻿using Boilerplate.Common.Data;
+using Boilerplate.MongoDB.Sample.Dtos;
+using Boilerplate.MongoDB.Sample.Models;
 using Microsoft.AspNetCore.Mvc;
-using Models;
+
+namespace Boilerplate.MongoDB.Sample.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -19,7 +19,7 @@ public class CustomerController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<Customer>> GetCustomers()
     {
-        return Ok(_repository.Read(Specs.True<Customer>()));
+        return Ok(_repository.Read(Common.Data.Specs.True<Customer>()));
     }
 
     [HttpGet("{id}", Name = "GetCustomerById")]

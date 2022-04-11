@@ -1,7 +1,7 @@
-namespace Boilerplate.MongoDB.Sample.Models;
-
 using System.ComponentModel.DataAnnotations;
-using Common.Data;
+using Boilerplate.Common.Data;
+
+namespace Boilerplate.MongoDB.Sample.Models;
 
 public class Customer : IEntity<string>
 {

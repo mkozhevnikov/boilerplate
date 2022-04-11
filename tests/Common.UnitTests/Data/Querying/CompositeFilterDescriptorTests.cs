@@ -176,7 +176,7 @@ public class CompositeFilterDescriptorTests
     [InlineData(10, 15, 10, false)]
     public void CompositeFilterDescriptor_Expression_And(int value, int greaterThan, int lessThan, bool expected)
     {
-        var testValue = new TestValueType(1, 10);
+        var testValue = new TestValueType(1, value);
         var filter = new CompositeFilterDescriptor {
             Logic = Logic.And,
             Filters = new[] {
@@ -205,7 +205,7 @@ public class CompositeFilterDescriptorTests
     [InlineData(10, 15, 10, false)]
     public void CompositeFilterDescriptor_Expression_Or(int value, int greaterThan, int lessThan, bool expected)
     {
-        var testValue = new TestValueType(1, 10);
+        var testValue = new TestValueType(1, value);
         var filter = new CompositeFilterDescriptor {
             Logic = Logic.Or,
             Filters = new[] {
