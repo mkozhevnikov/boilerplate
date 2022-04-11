@@ -190,4 +190,60 @@ public class FilterDescriptorTests
 
         predicate.Compile().Invoke(testValue).Should().BeFalse();
     }
+
+    private record StringValue(string Value);
+
+    public static IEnumerable<object[]> PositiveStringComparisons => new List<object[]> {
+        new object[] { "Foo Bar", "Foo", StringOperator.StartsWith },
+        new object[] { "Foo Bar", "Bar", StringOperator.EndsWith },
+        new object[] { "Foo Bar", "Bar", StringOperator.Contains },
+        new object[] { "Foo Bar", "Baz", StringOperator.DoesNotContain },
+        new object[] { "", null!, StringOperator.IsEmpty },
+        new object[] { null!, null!, StringOperator.IsEmpty },
+        new object[] { "Foo Bar", null!, StringOperator.IsNotEmpty }
+    };
+
+    [Theory]
+    [MemberData(nameof(PositiveStringComparisons))]
+    public void FilterDescriptor_Expression_StringOperations_Positive(
+        string value, string? compareTo, StringOperator op)
+    {
+        var testValue = new StringValue(value);
+        var filter = new FilterDescriptor {
+            Field = nameof(TestValueType.Value),
+            Operator = op,
+            Value = compareTo
+        };
+
+        var predicate = filter.ToExpression<StringValue>();
+
+        predicate.Compile().Invoke(testValue).Should().BeTrue();
+    }
+
+    public static IEnumerable<object[]> NegativeStringComparisons => new List<object[]> {
+        new object[] { "Foo Bar", "Bar", StringOperator.StartsWith },
+        new object[] { "Foo Bar", "Foo", StringOperator.EndsWith },
+        new object[] { "Foo Bar", "Baz", StringOperator.Contains },
+        new object[] { "Foo Bar", "Bar", StringOperator.DoesNotContain },
+        new object[] { "Foo Bar", null!, StringOperator.IsEmpty },
+        new object[] { "", null!, StringOperator.IsNotEmpty },
+        new object[] { null!, null!, StringOperator.IsNotEmpty }
+    };
+
+    [Theory]
+    [MemberData(nameof(NegativeStringComparisons))]
+    public void FilterDescriptor_Expression_StringOperations_Negative(
+        string value, string? compareTo, StringOperator op)
+    {
+        var testValue = new StringValue(value);
+        var filter = new FilterDescriptor {
+            Field = nameof(TestValueType.Value),
+            Operator = op,
+            Value = compareTo
+        };
+
+        var predicate = filter.ToExpression<StringValue>();
+
+        predicate.Compile().Invoke(testValue).Should().BeFalse();
+    }
 }
