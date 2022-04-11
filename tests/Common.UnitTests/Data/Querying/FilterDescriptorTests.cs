@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq.Expressions;
 using Boilerplate.Common.Data.Querying;
 using Boilerplate.Common.Utils;
 using FluentAssertions;
@@ -243,6 +244,68 @@ public class FilterDescriptorTests
         };
 
         var predicate = filter.ToExpression<StringValue>();
+
+        predicate.Compile().Invoke(testValue).Should().BeFalse();
+    }
+
+    [Fact]
+    public void FilterDescriptor_Expression_String_InArray()
+    {
+        var testValue = new StringValue("Foo Bar");
+        var strings = new[] { "Foo", "Bar", "Foo Bar" } as IList;
+        strings.Contains(testValue.Value).Should().BeTrue();
+        var filter = new FilterDescriptor {
+            Field = nameof(StringValue.Value),
+            Operator = Operator.In,
+            Value = strings
+        };
+
+        var predicate = filter.ToExpression<StringValue>();
+
+        predicate.Compile().Invoke(testValue).Should().BeTrue();
+    }
+
+    [Fact]
+    public void FilterDescriptor_Expression_String_NotInArray()
+    {
+        var testValue = new StringValue("Foo Bar");
+        var filter = new FilterDescriptor {
+            Field = nameof(StringValue.Value),
+            Operator = Operator.In,
+            Value = new[] { "Foo", "Bar" }
+        };
+
+        var predicate = filter.ToExpression<StringValue>();
+
+        predicate.Compile().Invoke(testValue).Should().BeFalse();
+    }
+
+    [Fact]
+    public void FilterDescriptor_Expression_Int_InArray()
+    {
+        var testValue = new TestValueType(1, 10);
+        var filter = new FilterDescriptor {
+            Field = nameof(TestValueType.Value),
+            Operator = Operator.In,
+            Value = new[] { 10, 20 }
+        };
+
+        var predicate = filter.ToExpression<TestValueType>();
+
+        predicate.Compile().Invoke(testValue).Should().BeTrue();
+    }
+
+    [Fact]
+    public void FilterDescriptor_Expression_Int_NotInArray()
+    {
+        var testValue = new TestValueType(1, 10);
+        var filter = new FilterDescriptor {
+            Field = nameof(TestValueType.Value),
+            Operator = Operator.In,
+            Value = new[] { 30, 20 }
+        };
+
+        var predicate = filter.ToExpression<TestValueType>();
 
         predicate.Compile().Invoke(testValue).Should().BeFalse();
     }

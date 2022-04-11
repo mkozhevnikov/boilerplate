@@ -1,5 +1,8 @@
+using System.Collections;
 using System.Linq.Expressions;
 using Ardalis.SmartEnum;
+using Boilerplate.Common.Utils;
+using Enumerable = System.Linq.Enumerable;
 
 namespace Boilerplate.Common.Data.Querying;
 
@@ -13,6 +16,7 @@ public abstract class Operator : SmartEnum<Operator>
     private const string lessThanOrEqualTo = "lte";
     private const string greaterThan = "gt";
     private const string greaterThanOrEqualTo = "gte";
+    private const string contains = "in";
 
     public static readonly Operator EqualTo = new EqualToOperator();
     public static readonly Operator NotEqualTo = new NotEqualToOperator();
@@ -22,6 +26,7 @@ public abstract class Operator : SmartEnum<Operator>
     public static readonly Operator LessThanOrEqualTo = new LessThanOrEqualToOperator();
     public static readonly Operator GreaterThan = new GreaterThanOperator();
     public static readonly Operator GreaterThanOrEqualTo = new GreaterThanOrEqualToOperator();
+    public static readonly Operator In = new ContainsOperator();
 
     public abstract Expression CreateExpression(Expression property, Expression value);
 
@@ -89,5 +94,27 @@ public abstract class Operator : SmartEnum<Operator>
 
         public override Expression CreateExpression(Expression property, Expression value) =>
             Expression.GreaterThanOrEqual(property, value);
+    }
+
+    private sealed class ContainsOperator : Operator
+    {
+        public ContainsOperator() : base(contains, 15) {}
+
+        public override Expression CreateExpression(Expression property, Expression value)
+        {
+            var memberReturnType = property.GetMemberReturnType();
+            if (!memberReturnType.IsValueType) {
+                return Expression.Call(
+                    Expression.Constant(((ConstantExpression)value).Value, typeof(IList)),
+                    nameof(IList.Contains),
+                    null,
+                    property);
+            }
+
+            var containsMethod = typeof(Enumerable).GetMethods()
+                .Single(m => m.Name == nameof(Enumerable.Contains) && m.GetParameters().Length == 2)
+                .MakeGenericMethod(memberReturnType);
+            return Expression.Call(containsMethod, value, property);
+        }
     }
 }

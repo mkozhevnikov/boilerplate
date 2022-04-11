@@ -1,8 +1,8 @@
+using System.Linq.Expressions;
+using System.Reflection;
 using Boilerplate.Common.Data.Querying;
 
 namespace Boilerplate.Common.Utils;
-
-using System.Linq.Expressions;
 
 public static class Expressions
 {
@@ -72,5 +72,20 @@ public static class Expressions
         return descriptor.Filters
             .Select(ToExpression<T>)
             .Aggregate((prev, next) => descriptor.Logic.CreateExpression(prev, next));
+    }
+
+    public static Type? GetMemberReturnType(this Expression expression)
+    {
+        if (expression is not MemberExpression memberExpression) {
+            return null;
+        }
+
+        return memberExpression.Member switch {
+            PropertyInfo property => property.PropertyType,
+            FieldInfo field => field.FieldType,
+            MethodInfo method => method.ReturnType,
+            EventInfo @event => @event.EventHandlerType,
+            _ => null
+        };
     }
 }

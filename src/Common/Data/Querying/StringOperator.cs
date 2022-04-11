@@ -21,6 +21,11 @@ public abstract class StringOperator : Operator
 
     public override Expression CreateExpression(Expression property, Expression value)
     {
+        var memberReturnType = property.GetMemberReturnType();
+        if (memberReturnType != typeof(string)) {
+            throw new ArgumentException($"Can't use string operator with member of Type: {memberReturnType}");
+        }
+
         var method = typeof(string).GetMethod(MethodName, new[] { typeof(string) });
         return Expression.Call(property, method, value);
     }
