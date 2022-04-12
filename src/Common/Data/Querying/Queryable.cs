@@ -6,6 +6,9 @@ namespace Boilerplate.Common.Data.Querying;
 
 public static class Queryable
 {
+    public static IQueryable<T> Sort<T>(this IQueryable<T> query, ISpec<T> spec) =>
+        spec is ISortedSpec<T> sortedSpec ? query.Sort(sortedSpec.Sort) : query;
+
     public static IQueryable<T> Sort<T>(
         this IQueryable<T> query,
         ListSortDescriptionCollection sorting)

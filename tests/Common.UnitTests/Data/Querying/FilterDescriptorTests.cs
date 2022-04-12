@@ -252,12 +252,10 @@ public class FilterDescriptorTests
     public void FilterDescriptor_Expression_String_InArray()
     {
         var testValue = new StringValue("Foo Bar");
-        var strings = new[] { "Foo", "Bar", "Foo Bar" } as IList;
-        strings.Contains(testValue.Value).Should().BeTrue();
         var filter = new FilterDescriptor {
             Field = nameof(StringValue.Value),
             Operator = Operator.In,
-            Value = strings
+            Value = new[] { "Foo", "Bar", "Foo Bar" }
         };
 
         var predicate = filter.ToExpression<StringValue>();
