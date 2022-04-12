@@ -1,9 +1,9 @@
-namespace Boilerplate.MongoDB.Sample;
+using Boilerplate.MongoDB.Sample.Models;
+using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
+using MongoDB.Driver.Core.Configuration;
 
-using global::MongoDB.Bson.Serialization;
-using global::MongoDB.Driver;
-using global::MongoDB.Driver.Core.Configuration;
-using Models;
+namespace Boilerplate.MongoDB.Sample;
 
 public partial class Startup
 {

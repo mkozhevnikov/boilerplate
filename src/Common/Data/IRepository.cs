@@ -4,7 +4,7 @@ public interface IReadRepository<T, TR>
 {
     TR? GetById<TK>(TK id) where TK : notnull;
     TR? GetBySpec(ISpec<T> specification);
-    IReadOnlyList<TR> Read(ISpec<T>? specification = null);
+    IList<TR> Read(ISpec<T>? specification = null);
     int Count(ISpec<T>? specification = null);
 }
 
@@ -18,4 +18,5 @@ public interface IBaseRepository<T, TR> : IReadRepository<T, TR>
 }
 
 public interface IRepository<T, TKey> : IBaseRepository<T, T> where T : IEntity<TKey>
-{}
+{
+}

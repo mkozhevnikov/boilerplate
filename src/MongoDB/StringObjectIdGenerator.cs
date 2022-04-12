@@ -1,7 +1,7 @@
-namespace Boilerplate.MongoDB;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 
-using global::MongoDB.Bson;
-using global::MongoDB.Bson.Serialization;
+namespace Boilerplate.MongoDB;
 
 public class StringObjectIdGenerator : IIdGenerator
 {

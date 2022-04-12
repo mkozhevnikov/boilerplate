@@ -1,6 +1,8 @@
-namespace Boilerplate.Common.Utils;
-
 using System.Linq.Expressions;
+using System.Reflection;
+using Boilerplate.Common.Data.Querying;
+
+namespace Boilerplate.Common.Utils;
 
 public static class Expressions
 {
@@ -12,10 +14,10 @@ public static class Expressions
         protected override Expression VisitParameter(ParameterExpression node) =>
             ReferenceEquals(node, oldParam) ? newParam : base.VisitParameter(node);
 
-        public Expression ReplaceParameter(Expression expr, ParameterExpression oldParam, ParameterExpression newParam)
+        public Expression ReplaceParameter(Expression expr, ParameterExpression left, ParameterExpression right)
         {
-            this.oldParam = oldParam;
-            this.newParam = newParam;
+            oldParam = left;
+            newParam = right;
             return base.Visit(expr);
         }
     }
@@ -45,5 +47,45 @@ public static class Expressions
     {
         var negated = Expression.Not(expr.Body);
         return Expression.Lambda<Func<T, bool>>(negated, expr.Parameters);
+    }
+
+    public static Expression<Func<T, bool>> ToExpression<T>(this FilterDescriptor descriptor)
+    {
+        if (descriptor is CompositeFilterDescriptor compositeDescriptor) {
+            return compositeDescriptor.ToExpression<T>();
+        }
+
+        var param = Expression.Parameter(typeof(T));
+        var property = Expression.Property(param, descriptor.Field);
+        var valueParam = Expression.Constant(descriptor.Value);
+        var expression = descriptor.Operator.CreateExpression(property, valueParam);
+
+        return Expression.Lambda<Func<T, bool>>(expression, param);
+    }
+
+    public static Expression<Func<T, bool>> ToExpression<T>(this CompositeFilterDescriptor descriptor)
+    {
+        if (!descriptor.Filters.Any()) {
+            return _ => true;
+        }
+
+        return descriptor.Filters
+            .Select(ToExpression<T>)
+            .Aggregate((prev, next) => descriptor.Logic.CreateExpression(prev, next));
+    }
+
+    public static Type? GetMemberReturnType(this Expression expression)
+    {
+        if (expression is not MemberExpression memberExpression) {
+            return null;
+        }
+
+        return memberExpression.Member switch {
+            PropertyInfo property => property.PropertyType,
+            FieldInfo field => field.FieldType,
+            MethodInfo method => method.ReturnType,
+            EventInfo @event => @event.EventHandlerType,
+            _ => null
+        };
     }
 }
