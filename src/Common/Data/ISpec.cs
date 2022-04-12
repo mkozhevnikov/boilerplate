@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Linq.Expressions;
 
 namespace Boilerplate.Common.Data;
@@ -19,14 +18,6 @@ public interface ISpec<T>
     /// Limiting specification to return certain number of objects
     /// </summary>
     int? Take { get; }
-}
-
-public interface ISortedSpec<T> : ISpec<T>
-{
-    /// <summary>
-    /// Sorting specification to return objects in specific order
-    /// </summary>
-    ListSortDescriptionCollection Sort { get; }
 }
 
 public class Spec<T> : ISpec<T>

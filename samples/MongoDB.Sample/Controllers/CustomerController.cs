@@ -9,42 +9,44 @@ namespace Boilerplate.MongoDB.Sample.Controllers;
 [Route("api/[controller]")]
 public class CustomerController : ControllerBase
 {
-    private readonly IRepository<Customer, string> _repository;
+    private readonly IRepository<Customer, string> repository;
 
     public CustomerController(IRepository<Customer, string> repository)
     {
-        _repository = repository;
+        this.repository = repository;
     }
 
     [HttpGet]
     public ActionResult<IEnumerable<Customer>> GetCustomers()
     {
-        return Ok(_repository.Read(Common.Data.Specs.True<Customer>()));
+        return Ok(repository.Read());
     }
 
     [HttpGet("{id}", Name = "GetCustomerById")]
     public ActionResult<Customer> GetCustomer(string id)
     {
-        var customer = _repository.GetById(id);
+        var customer = repository.GetById(id);
 
-        if (customer is null)
+        if (customer is null) {
             return NotFound();
+        }
+
         return Ok(customer);
     }
 
     [HttpPost]
     public ActionResult<Customer> CreateCustomer(CustomerCreateDto model)
     {
-        var customer = _repository.Create(new Customer {
+        var customer = repository.Create(new Customer {
             Name = model.Name
         });
-        return CreatedAtRoute("GetCustomerById", new { Id = customer.Id }, customer);
+        return CreatedAtRoute("GetCustomerById", new { customer.Id }, customer);
     }
 
     [HttpPatch("{id}")]
     public ActionResult<Customer> UpdateCustomer(string id, CustomerUpdateDto model)
     {
-        var customer = _repository.Update(new Customer {
+        var customer = repository.Update(new Customer {
             Id = id,
             Name = model.Name
         });
@@ -54,7 +56,7 @@ public class CustomerController : ControllerBase
     [HttpDelete("{id}")]
     public ActionResult DeleteCustomer(string id)
     {
-        _repository.Delete(id);
+        repository.Delete(id);
         return NoContent();
     }
 }
