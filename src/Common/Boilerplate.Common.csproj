@@ -3,7 +3,6 @@
   <PropertyGroup>
     <AssemblyName>Boilerplate.Common</AssemblyName>
     <RootNamespace>Boilerplate.Common</RootNamespace>
-    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Label="Package">
