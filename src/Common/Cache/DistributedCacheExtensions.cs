@@ -7,19 +7,21 @@ public static class DistributedCache
 {
     private static readonly TimeSpan defaultExpiration = TimeSpan.FromMinutes(1);
 
-    public static async ValueTask<T?> GetOrSetAsync<T>(
+    #region GetOrSet
+
+    public static async ValueTask<T> GetOrSetAsync<T>(
         this IDistributedCache cache,
         string key,
-        T? value,
+        T value,
         TimeSpan? expiresIn,
         JsonSerializerOptions? jsonSerializerOptions = null,
         CancellationToken token = default) =>
         await cache.GetOrSetAsync(key, () => Task.FromResult(value), expiresIn, jsonSerializerOptions, token);
 
-    public static async ValueTask<T?> GetOrSetAsync<T>(
+    public static async Task<T> GetOrSetAsync<T>(
         this IDistributedCache cache,
         string key,
-        Func<Task<T?>> valueFactory,
+        Func<Task<T>> valueFactory,
         TimeSpan? expiresIn,
         JsonSerializerOptions? jsonSerializerOptions = null,
         CancellationToken token = default)
@@ -31,10 +33,10 @@ public static class DistributedCache
         return await cache.GetOrSetAsync(key, valueFactory, options, jsonSerializerOptions, token);
     }
 
-    public static async ValueTask<T?> GetOrSetAsync<T>(
+    public static async Task<T> GetOrSetAsync<T>(
         this IDistributedCache cache,
         string key,
-        Func<Task<T?>> valueFactory,
+        Func<Task<T>> valueFactory,
         DistributedCacheEntryOptions? options = null,
         JsonSerializerOptions? jsonSerializerOptions = null,
         CancellationToken token = default)
@@ -49,13 +51,17 @@ public static class DistributedCache
         return value;
     }
 
-    public static async ValueTask<T?> GetAsJsonAsync<T>(
+    #endregion
+
+    #region GetAsJson
+
+    public static async Task<T?> GetAsJsonAsync<T>(
         this IDistributedCache cache,
         string key,
         CancellationToken token = default) =>
         await cache.GetAsJsonAsync<T>(key, null, token);
 
-    public static async ValueTask<T?> GetAsJsonAsync<T>(
+    public static async Task<T?> GetAsJsonAsync<T>(
         this IDistributedCache cache,
         string key,
         JsonSerializerOptions? jsonSerializerOptions,
@@ -66,7 +72,11 @@ public static class DistributedCache
         return bytes == null ? default : Deserialize<T>(bytes, jsonSerializerOptions);
     }
 
-    public static async ValueTask SetAsJsonAsync<T>(
+    #endregion
+
+    #region SetAsJson
+
+    public static async Task SetAsJsonAsync<T>(
         this IDistributedCache cache,
         string key,
         T? value,
@@ -81,7 +91,7 @@ public static class DistributedCache
         await cache.SetAsJsonAsync(key, value, options, null, token);
     }
 
-    public static async ValueTask SetAsJsonAsync<T>(
+    public static async Task SetAsJsonAsync<T>(
         this IDistributedCache cache,
         string key,
         T? value,
@@ -98,7 +108,9 @@ public static class DistributedCache
         await cache.SetAsync(key, bytes, options, token);
     }
 
-    public static async ValueTask<bool> ExistsAsync(
+    #endregion
+
+    public static async Task<bool> ExistsAsync(
         this IDistributedCache cache,
         string key,
         CancellationToken token = default) =>
