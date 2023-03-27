@@ -1,17 +1,13 @@
-using Ardalis.SmartEnum.JsonNet;
-using JsonSubTypes;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using Ardalis.SmartEnum.SystemTextJson;
 
 namespace Boilerplate.Common.Data.Querying;
 
 /// <summary>
 /// A basic filter expression. Usually is a part of <see cref="CompositeFilterDescriptor"/>
 /// </summary>
-[JsonConverter(typeof(JsonSubtypes))]
-[JsonSubtypes.KnownSubTypeWithPropertyAttribute(
-    typeof(CompositeFilterDescriptor), nameof(CompositeFilterDescriptor.Logic))]
-[JsonSubtypes.KnownSubTypeWithPropertyAttribute(typeof(FilterDescriptor), nameof(Operator))]
-[JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
+[JsonPolymorphic]
+[JsonDerivedType(typeof(CompositeFilterDescriptor))]
 public class FilterDescriptor
 {
     /// <summary>

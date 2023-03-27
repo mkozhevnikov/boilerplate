@@ -1,9 +1,9 @@
 using System.Collections;
-using Ardalis.SmartEnum.JsonNet;
+using System.Text.Json;
+using Ardalis.SmartEnum.SystemTextJson;
 using Boilerplate.Common.Data.Querying;
 using Boilerplate.Common.Utils;
 using FluentAssertions;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Boilerplate.Common.UnitTests.Data.Querying;
@@ -19,20 +19,12 @@ public class FilterDescriptorTests
             Value = "John Doe"
         };
 
-        var serializedFilter = JsonConvert.SerializeObject(filter);
+        var serializedFilter = JsonSerializer.Serialize(filter);
 
         serializedFilter.Should().NotBeEmpty();
         serializedFilter.Should().Contain($"\"Field\":\"{filter.Field}\"");
         serializedFilter.Should().Contain($"\"Operator\":\"{filter.Operator}\"");
         serializedFilter.Should().Contain($"\"Value\":\"{filter.Value}\"");
-    }
-
-    [Fact]
-    public void FilterDescriptor_Deserialize_Default()
-    {
-        var deserializedFilter = JsonConvert.DeserializeObject<FilterDescriptor>(string.Empty);
-
-        deserializedFilter.Should().BeNull();
     }
 
     [Fact]
@@ -44,12 +36,12 @@ public class FilterDescriptorTests
             Value = "John Doe"
         };
 
-        var deserializedFilter = JsonConvert.DeserializeObject<FilterDescriptor>(filter.ToJson());
+        var deserializedFilter = JsonSerializer.Deserialize<FilterDescriptor>(filter.ToJson());
 
         deserializedFilter.Should().NotBeNull();
         deserializedFilter!.Field.Should().Be(filter.Field);
         deserializedFilter.Operator.Should().Be(Operator.FromName(filter.Operator));
-        deserializedFilter.Value.Should().Be(filter.Value);
+        deserializedFilter.Value!.ToString().Should().Be(filter.Value);
     }
 
     private record IntComparison(int Value, int CompareTo, Operator Operator);
@@ -317,7 +309,7 @@ public class FilterDescriptorTests
             Operator = Operator.In,
             Value = new[] { 10, 20 }
         };
-        var filter = JsonConvert.DeserializeObject<FilterDescriptor>(
+        var filter = JsonSerializer.Deserialize<FilterDescriptor>(
             payload.ToJson(converters: new SmartEnumNameConverter<Operator, int>()));
 
         var predicate = filter!.ToExpression<TestValueType>();
@@ -334,7 +326,7 @@ public class FilterDescriptorTests
             Operator = Operator.In,
             Value = new[] { "Foo", "Bar" }
         };
-        var filter = JsonConvert.DeserializeObject<FilterDescriptor>(
+        var filter = JsonSerializer.Deserialize<FilterDescriptor>(
             payload.ToJson(converters: new SmartEnumNameConverter<Operator, int>()));
 
         var predicate = filter!.ToExpression<StringValue>();
