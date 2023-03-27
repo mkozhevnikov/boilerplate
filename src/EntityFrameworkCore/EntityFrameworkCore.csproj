@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Package">
+    <Product>Boilerplate EntityFramework Core</Product>
+    <Description>Persistence implementation using EF Core</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
+  </ItemGroup>
+
+</Project>

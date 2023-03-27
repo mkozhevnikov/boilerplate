@@ -8,18 +8,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D3E0F0A1-4A5
 		src\Directory.Build.props = src\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boilerplate.Common", "src\Common\Boilerplate.Common.csproj", "{272EF4BE-7D1F-4AC6-BA9F-75788966B463}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "src\Common\Common.csproj", "{272EF4BE-7D1F-4AC6-BA9F-75788966B463}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boilerplate.EntityFrameworkCore", "src\EntityFrameworkCore\Boilerplate.EntityFrameworkCore.csproj", "{AED7304D-54E4-4ADB-9B46-DFB1B1FE6E90}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkCore", "src\EntityFrameworkCore\EntityFrameworkCore.csproj", "{AED7304D-54E4-4ADB-9B46-DFB1B1FE6E90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boilerplate.MongoDB", "src\MongoDB\Boilerplate.MongoDB.csproj", "{8CEFC556-B6E9-4F49-B241-D418DE8BA57B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDB", "src\MongoDB\MongoDB.csproj", "{8CEFC556-B6E9-4F49-B241-D418DE8BA57B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{99834A5B-0990-4DDE-BA03-6BD994E12B98}"
 	ProjectSection(SolutionItems) = preProject
 		samples\Directory.Build.props = samples\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boilerplate.MongoDB.Sample", "samples\MongoDB.Sample\Boilerplate.MongoDB.Sample.csproj", "{D8871CE2-D6F2-414B-B76B-65171199411B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDB.Sample", "samples\MongoDB.Sample\MongoDB.Sample.csproj", "{D8871CE2-D6F2-414B-B76B-65171199411B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E500456D-0A09-4A0D-8643-65E51219AFF8}"
 	ProjectSection(SolutionItems) = preProject
@@ -70,7 +70,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\build.yml = .github\workflows\build.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boilerplate.Common.UnitTests", "tests\Common.UnitTests\Boilerplate.Common.UnitTests.csproj", "{C25A7BB5-339F-4014-A77E-5E582B244C53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.UnitTests", "tests\Common.UnitTests\Common.UnitTests.csproj", "{C25A7BB5-339F-4014-A77E-5E582B244C53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

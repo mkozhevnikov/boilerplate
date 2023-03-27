@@ -2,6 +2,10 @@
 
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
   <PropertyGroup Label="Temporarily">
     <NoWarn>CS8618,SA0001</NoWarn>
   </PropertyGroup>
