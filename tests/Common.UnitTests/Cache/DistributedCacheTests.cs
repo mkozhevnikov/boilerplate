@@ -61,7 +61,7 @@ public class DistributedCacheTests
         });
 
         var cachedValue = await cache.GetAsync(key);
-        var jsonSerializedModel = Encoding.UTF8.GetString(cachedValue);
+        var jsonSerializedModel = Encoding.UTF8.GetString(cachedValue!);
         jsonSerializedModel.Should().NotBeEmpty().And.MatchRegex("^{(\\s+\"\\w+\\\".+\\n)+}$");
     }
 
@@ -148,7 +148,7 @@ public class DistributedCacheTests
             IntProp = 123
         };
 
-        var sut = await cache.GetOrSetAsync(key, () => Task.FromResult((TestModel?)model), TimeSpan.FromMinutes(5));
+        var sut = await cache.GetOrSetAsync(key, () => Task.FromResult(model), TimeSpan.FromMinutes(5));
 
         sut.Should().NotBeNull();
         sut!.IntProp.Should().Be(model.IntProp);
