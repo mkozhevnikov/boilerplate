@@ -1,5 +1,5 @@
-using Ardalis.SmartEnum.JsonNet;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using Ardalis.SmartEnum.SystemTextJson;
 
 namespace Boilerplate.Common.Data.Querying;
 

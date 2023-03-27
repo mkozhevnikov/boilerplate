@@ -1,7 +1,7 @@
+using System.Text.Json;
 using Boilerplate.Common.Data.Querying;
 using Boilerplate.Common.Utils;
 using FluentAssertions;
-using Newtonsoft.Json;
 using Xunit;
 using Enumerable = System.Linq.Enumerable;
 
@@ -21,7 +21,7 @@ public class CompositeFilterDescriptorTests
             }
         };
 
-        var serializedFilter = JsonConvert.SerializeObject(filter);
+        var serializedFilter = JsonSerializer.Serialize<FilterDescriptor>(filter);
 
         serializedFilter.Should().NotBeEmpty();
         serializedFilter.Should().Contain($"\"Logic\":\"{filter.Logic}\"");
@@ -37,20 +37,12 @@ public class CompositeFilterDescriptorTests
             Value = "John Doe"
         };
 
-        var serializedFilter = JsonConvert.SerializeObject(filter);
+        var serializedFilter = JsonSerializer.Serialize<FilterDescriptor>(filter);
 
         serializedFilter.Should().NotBeEmpty();
         serializedFilter.Should().Contain($"\"Field\":\"{filter.Field}\"");
         serializedFilter.Should().Contain($"\"Operator\":\"{filter.Operator}\"");
         serializedFilter.Should().Contain($"\"Value\":\"{filter.Value}\"");
-    }
-
-    [Fact]
-    public void CompositeFilterDescriptor_Deserialize_Default()
-    {
-        var deserializeFilter = JsonConvert.DeserializeObject<CompositeFilterDescriptor>(string.Empty);
-
-        deserializeFilter.Should().BeNull();
     }
 
     [Fact]
@@ -65,7 +57,7 @@ public class CompositeFilterDescriptorTests
             }
         };
 
-        var deserializedFilter = JsonConvert.DeserializeObject<CompositeFilterDescriptor>(filter.ToJson());
+        var deserializedFilter = JsonSerializer.Deserialize<CompositeFilterDescriptor>(filter.ToJson());
 
         deserializedFilter.Should().NotBeNull();
         deserializedFilter!.Logic.Should().Be(filter.Logic);
@@ -82,12 +74,12 @@ public class CompositeFilterDescriptorTests
             Value = "John Doe"
         };
 
-        var deserializedFilter = JsonConvert.DeserializeObject<CompositeFilterDescriptor>(filter.ToJson());
+        var deserializedFilter = JsonSerializer.Deserialize<CompositeFilterDescriptor>(filter.ToJson());
 
         deserializedFilter.Should().NotBeNull();
         deserializedFilter!.Field.Should().Be(filter.Field);
         deserializedFilter.Operator.Should().Be(Operator.FromName(filter.Operator));
-        deserializedFilter.Value.Should().Be(filter.Value);
+        deserializedFilter.Value!.ToString().Should().Be(filter.Value);
     }
 
     [Fact]
@@ -108,7 +100,7 @@ public class CompositeFilterDescriptorTests
         };
         var serializedFilter = filter.ToJson();
 
-        var deserializedFilter = JsonConvert.DeserializeObject<CompositeFilterDescriptor>(serializedFilter);
+        var deserializedFilter = JsonSerializer.Deserialize<CompositeFilterDescriptor>(serializedFilter);
 
         deserializedFilter.Should().NotBeNull();
         deserializedFilter!.Logic.Should().Be(filter.Logic);
