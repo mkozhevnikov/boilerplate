@@ -8,7 +8,9 @@
     <AnalysisLevel>latest</AnalysisLevel>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <OutputPath>$(SolutionDir)artifacts\</OutputPath>
+    <SolutionDir Condition="$(SolutionDir) == ''">$(MSBuildThisFileDirectory)</SolutionDir>
+    <OutputPath>$(SolutionDir)\artifacts</OutputPath>
+    <BaseIntermediateOutputPath>$(SolutionDir)\artifacts\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Label="Package">
