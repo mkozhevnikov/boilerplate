@@ -3,26 +3,26 @@ using Ardalis.SmartEnum;
 
 namespace Boilerplate.Common.Data.Querying;
 
-public abstract class SortEnum : SmartEnum<SortEnum>
+public abstract class Sort : SmartEnum<Sort>
 {
     private const string ascending = "Asc";
     private const string descending = "Desc";
 
-    public static readonly SortEnum Ascending = new AscendingSort();
-    public static readonly SortEnum Descending = new DescendingSort();
+    public static readonly Sort Ascending = new AscendingSort();
+    public static readonly Sort Descending = new DescendingSort();
 
     public abstract string OrderByMethod { get; }
     public abstract string ThenByMethod { get; }
 
-    public static implicit operator ListSortDirection(SortEnum sortEnum) => (ListSortDirection)sortEnum.Value;
+    public static implicit operator ListSortDirection(Sort sort) => (ListSortDirection)sort.Value;
 
-    public static explicit operator SortEnum(ListSortDirection sortDirection) => FromValue((int)sortDirection);
+    public static explicit operator Sort(ListSortDirection sortDirection) => FromValue((int)sortDirection);
 
-    protected SortEnum(string name, ListSortDirection value) : base(name, (int)value)
+    protected Sort(string name, ListSortDirection value) : base(name, (int)value)
     {
     }
 
-    private sealed class AscendingSort : SortEnum
+    private sealed class AscendingSort : Sort
     {
         public override string OrderByMethod => nameof(System.Linq.Queryable.OrderBy);
         public override string ThenByMethod => nameof(System.Linq.Queryable.ThenBy);
@@ -30,7 +30,7 @@ public abstract class SortEnum : SmartEnum<SortEnum>
         public AscendingSort() : base(ascending, ListSortDirection.Ascending) {}
     }
 
-    private sealed class DescendingSort : SortEnum
+    private sealed class DescendingSort : Sort
     {
         public override string OrderByMethod => nameof(System.Linq.Queryable.OrderByDescending);
         public override string ThenByMethod => nameof(System.Linq.Queryable.ThenByDescending);

@@ -1,35 +1,36 @@
-using System.ComponentModel;
 using System.Linq.Expressions;
-using Boilerplate.Common.Utils;
 
 namespace Boilerplate.Common.Data.Querying;
 
 public static class Queryable
 {
     public static IQueryable<T> Sort<T>(this IQueryable<T> query, ISpec<T> spec) =>
-        spec is ISortedSpec<T> sortedSpec ? query.Sort(sortedSpec.Sort) : query;
+        spec is ISortingSpec<T> sortingSpec ? query.Sort(sortingSpec.Sorting) : query;
 
     public static IQueryable<T> Sort<T>(
         this IQueryable<T> query,
-        ListSortDescriptionCollection sorting)
+        ICollection<SortingDescriptor> sorting)
     {
-        if (sorting.Count == 0) {
+        if (!sorting.Any()) {
             return query;
         }
 
-        return sorting.AsEnumerable<ListSortDescription>()
-            .Aggregate(query, (q, sort) => q == query ? q.OrderBy(sort) : q.ThenBy(sort));
+        return sorting.Aggregate(query, (q, sort) => q.Equals(query)
+            ? q.OrderBy(sort.Property, sort.Direction)
+            : q.ThenBy(sort.Property, sort.Direction));
     }
 
     public static IQueryable<T> OrderBy<T>(
         this IQueryable<T> query,
-        ListSortDescription sort) =>
-        query.OrderBy(sort.PropertyDescriptor, ((SortEnum)sort.SortDirection).OrderByMethod);
+        PropertyDescriptor propertyDescriptor,
+        Sort sortMethod) =>
+        query.OrderBy(propertyDescriptor, sortMethod.OrderByMethod);
 
     public static IQueryable<T> ThenBy<T>(
         this IQueryable<T> query,
-        ListSortDescription sort) =>
-        query.OrderBy(sort.PropertyDescriptor, ((SortEnum)sort.SortDirection).ThenByMethod);
+        PropertyDescriptor propertyDescriptor,
+        Sort sortMethod) =>
+        query.OrderBy(propertyDescriptor, sortMethod.ThenByMethod);
 
     private static IQueryable<T> OrderBy<T>(
         this IQueryable<T> query,

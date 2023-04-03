@@ -5,9 +5,9 @@ namespace Boilerplate.Common.Data;
 
 public static class Specs
 {
-    public static ISpec<T> True<T>() => new Spec<T>(_ => true);
+    public static Spec<T> True<T>() => new(_ => true);
 
-    public static ISpec<T> False<T>() => new Spec<T>(_ => false);
+    public static Spec<T> False<T>() => new(_ => false);
 
     public static ISpec<T> And<T>(this ISpec<T> spec, ISpec<T> other) => And(spec, other.Expression);
 

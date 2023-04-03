@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using Boilerplate.Common.Data;
 using Boilerplate.Common.Data.Querying;
 using FluentAssertions;
@@ -33,7 +32,7 @@ public class ListRequestTests
     public void ListRequest_Spec_Filtered()
     {
         var testValue = new TestValueType(1, 10);
-        var request = new TestFilteredRequest {
+        var request = new TestFilteredListRequest {
             Filter = new FilterDescriptor {
                 Field = nameof(TestValueType.Value),
                 Operator = Operator.In,
@@ -50,7 +49,7 @@ public class ListRequestTests
     public void ListRequest_Spec_Filtered_Negative()
     {
         var testValue = new TestValueType(1, 10);
-        var request = new TestFilteredRequest {
+        var request = new TestFilteredListRequest {
             Filter = new FilterDescriptor {
                 Field = nameof(TestValueType.Value),
                 Operator = Operator.In,
@@ -66,7 +65,7 @@ public class ListRequestTests
     [Fact]
     public void ListRequest_Spec_Paged()
     {
-        var request = new TestPagedRequest {
+        var request = new TestPagedListRequest {
             Skip = 1,
             Take = 3
         };
@@ -80,63 +79,42 @@ public class ListRequestTests
     [Fact]
     public void ListRequest_Spec_Sorted()
     {
-        var indexPropertyDescriptor = new TestPropertyDescriptor(nameof(TestValueType.Index), null);
-        var request = new TestSortedRequest {
-            Sort = new ListSortDescriptionCollection(new[] {
-                new ListSortDescription(indexPropertyDescriptor, ListSortDirection.Ascending)
-            })
+        var indexPropertyDescriptor = TestPropertyDescriptor.Index;
+        var sorting = new List<SortingDescriptor> {
+            new() {
+                Property = indexPropertyDescriptor, Direction = Sort.Ascending
+            }
+        };
+        var request = new TestSortedListRequest {
+            Sort = sorting
         };
 
         var predicate = request.ToSpec<int>();
 
-        predicate.Should().BeAssignableTo<ISortedSpec<int>>();
-        ((ISortedSpec<int>)predicate).Sort.Should().BeEquivalentTo(request.Sort);
+        predicate.Should().BeAssignableTo<ISortingSpec<int>>();
+        ((ISortingSpec<int>)predicate).Sorting.Should().BeEquivalentTo(request.Sort);
     }
 
     [Fact]
     public void ListRequest_Spec_PagedAndSorted()
     {
-        var indexPropertyDescriptor = new TestPropertyDescriptor(nameof(TestValueType.Index), null);
-        var request = new TestPagedSortedRequest {
+        var indexPropertyDescriptor = TestPropertyDescriptor.Index;
+        var sorting = new List<SortingDescriptor> {
+            new() {
+                Property = indexPropertyDescriptor, Direction = Sort.Ascending
+            }
+        };
+        var request = new TestPagedSortedListRequest {
             Skip = 1,
             Take = 3,
-            Sort = new ListSortDescriptionCollection(new[] {
-                new ListSortDescription(indexPropertyDescriptor, ListSortDirection.Ascending)
-            })
+            Sort = sorting
         };
 
         var predicate = request.ToSpec<int>();
 
         predicate.Skip.Should().Be(request.Skip);
         predicate.Take.Should().Be(request.Take);
-        predicate.Should().BeAssignableTo<ISortedSpec<int>>();
-        ((ISortedSpec<int>)predicate).Sort.Should().BeEquivalentTo(request.Sort);
-    }
-
-    private class TestListRequest : IListRequest
-    {
-    }
-
-    private class TestFilteredRequest : IFilteredListRequest
-    {
-        public FilterDescriptor Filter { get; set; } = null!;
-    }
-
-    private class TestPagedRequest : IPagedListRequest
-    {
-        public int Skip { get; set; }
-        public int Take { get; set; }
-    }
-
-    private class TestSortedRequest : ISortedListRequest
-    {
-        public ListSortDescriptionCollection Sort { get; set; } = null!;
-    }
-
-    private class TestPagedSortedRequest : IPagedListRequest, ISortedListRequest
-    {
-        public int Skip { get; set; }
-        public int Take { get; set; }
-        public ListSortDescriptionCollection Sort { get; set; } = null!;
+        predicate.Should().BeAssignableTo<ISortingSpec<int>>();
+        ((ISortingSpec<int>)predicate).Sorting.Should().BeEquivalentTo(request.Sort);
     }
 }

@@ -1,6 +1,4 @@
-using System.ComponentModel;
 using Boilerplate.Common.Utils;
-using Newtonsoft.Json;
 
 namespace Boilerplate.Common.Data.Querying;
 
@@ -16,8 +14,7 @@ public interface IPagedListRequest : IListRequest
 
 public interface ISortedListRequest : IListRequest
 {
-    [JsonConverter(typeof(SortDescriptorConverter))]
-    ListSortDescriptionCollection Sort { get; set; }
+    ICollection<SortingDescriptor> Sort { get; set; }
 }
 
 public interface IFilteredListRequest : IListRequest
@@ -31,7 +28,7 @@ public static class ListRequestExtensions
     {
         var spec = request is IFilteredListRequest filteredRequest
             ? new Spec<T>(filteredRequest.Filter.ToExpression<T>())
-            : new Spec<T>(_ => true);
+            : Specs.True<T>();
 
         if (request is IPagedListRequest pagedRequest) {
             spec.Skip = pagedRequest.Skip;
@@ -39,8 +36,8 @@ public static class ListRequestExtensions
         }
 
         if (request is ISortedListRequest sortedRequest) {
-            return new SortedSpec<T>(spec) {
-                Sort = sortedRequest.Sort
+            return new SortingSpec<T>(spec) {
+                Sorting = sortedRequest.Sort
             };
         }
 
