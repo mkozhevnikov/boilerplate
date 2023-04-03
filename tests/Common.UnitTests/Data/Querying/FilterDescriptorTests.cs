@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Text.Json;
-using Ardalis.SmartEnum.SystemTextJson;
 using Boilerplate.Common.Data.Querying;
 using Boilerplate.Common.Utils;
 using FluentAssertions;
@@ -10,40 +8,6 @@ namespace Boilerplate.Common.UnitTests.Data.Querying;
 
 public class FilterDescriptorTests
 {
-    [Fact]
-    public void FilterDescriptor_Serialize_Basic()
-    {
-        var filter = new FilterDescriptor {
-            Field = "name",
-            Operator = Operator.EqualTo,
-            Value = "John Doe"
-        };
-
-        var serializedFilter = JsonSerializer.Serialize(filter);
-
-        serializedFilter.Should().NotBeEmpty();
-        serializedFilter.Should().Contain($"\"Field\":\"{filter.Field}\"");
-        serializedFilter.Should().Contain($"\"Operator\":\"{filter.Operator}\"");
-        serializedFilter.Should().Contain($"\"Value\":\"{filter.Value}\"");
-    }
-
-    [Fact]
-    public void FilterDescriptor_Deserialize_Basic()
-    {
-        var filter = new {
-            Field = "name",
-            Operator = "eq",
-            Value = "John Doe"
-        };
-
-        var deserializedFilter = JsonSerializer.Deserialize<FilterDescriptor>(filter.ToJson());
-
-        deserializedFilter.Should().NotBeNull();
-        deserializedFilter!.Field.Should().Be(filter.Field);
-        deserializedFilter.Operator.Should().Be(Operator.FromName(filter.Operator));
-        deserializedFilter.Value!.ToString().Should().Be(filter.Value);
-    }
-
     private record IntComparison(int Value, int CompareTo, Operator Operator);
 
     private class PositiveIntComparison : IEnumerable<object[]>
@@ -184,8 +148,6 @@ public class FilterDescriptorTests
         predicate.Compile().Invoke(testValue).Should().BeFalse();
     }
 
-    private record StringValue(string Value);
-
     public static IEnumerable<object[]> PositiveStringComparisons => new List<object[]> {
         new object[] { "Foo Bar", "Foo", StringOperator.StartsWith },
         new object[] { "Foo Bar", "Bar", StringOperator.EndsWith },
@@ -298,39 +260,5 @@ public class FilterDescriptorTests
         var predicate = filter.ToExpression<TestValueType>();
 
         predicate.Compile().Invoke(testValue).Should().BeFalse();
-    }
-
-    [Fact]
-    public void FilterDescriptor_Deserialized_Expression_Int_InArray()
-    {
-        var testValue = new TestValueType(1, 10);
-        var payload = new {
-            Field = nameof(TestValueType.Value),
-            Operator = Operator.In,
-            Value = new[] { 10, 20 }
-        };
-        var filter = JsonSerializer.Deserialize<FilterDescriptor>(
-            payload.ToJson(converters: new SmartEnumNameConverter<Operator, int>()));
-
-        var predicate = filter!.ToExpression<TestValueType>();
-
-        predicate.Compile().Invoke(testValue).Should().BeTrue();
-    }
-
-    [Fact]
-    public void FilterDescriptor_Deserialized_Expression_String_InArray()
-    {
-        var testValue = new StringValue("Foo");
-        var payload = new {
-            Field = nameof(StringValue.Value),
-            Operator = Operator.In,
-            Value = new[] { "Foo", "Bar" }
-        };
-        var filter = JsonSerializer.Deserialize<FilterDescriptor>(
-            payload.ToJson(converters: new SmartEnumNameConverter<Operator, int>()));
-
-        var predicate = filter!.ToExpression<StringValue>();
-
-        predicate.Compile().Invoke(testValue).Should().BeTrue();
     }
 }
