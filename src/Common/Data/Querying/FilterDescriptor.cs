@@ -7,7 +7,7 @@ namespace Boilerplate.Common.Data.Querying;
 /// A basic filter expression. Usually is a part of <see cref="CompositeFilterDescriptor"/>
 /// </summary>
 [JsonPolymorphic]
-[JsonDerivedType(typeof(CompositeFilterDescriptor))]
+[JsonDerivedType(typeof(CompositeFilterDescriptor), typeDiscriminator: "withLogic")]
 public class FilterDescriptor
 {
     /// <summary>
