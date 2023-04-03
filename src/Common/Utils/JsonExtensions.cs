@@ -22,4 +22,28 @@ public static class JsonExtensions
 
         return source.ToJson(options);
     }
+
+    internal static void EnsureJsonValueKindIsArray(JsonElement jsonElement)
+    {
+        const string errorMessage = "Can't iterate non array element";
+        if (jsonElement.ValueKind != JsonValueKind.Array) {
+            throw new InvalidOperationException(errorMessage);
+        }
+    }
+
+    public static IEnumerable<string?> AsStringArray(this JsonElement jsonElement)
+    {
+        EnsureJsonValueKindIsArray(jsonElement);
+        foreach (JsonElement element in jsonElement.EnumerateArray()) {
+            yield return element.GetString();
+        }
+    }
+
+    public static IEnumerable<int> AsIntArray(this JsonElement jsonElement)
+    {
+        EnsureJsonValueKindIsArray(jsonElement);
+        foreach (JsonElement element in jsonElement.EnumerateArray()) {
+            yield return element.GetInt32();
+        }
+    }
 }

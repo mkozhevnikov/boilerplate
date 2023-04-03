@@ -32,3 +32,5 @@ internal class TestPropertyDescriptor : PropertyDescriptor
 }
 
 internal record TestValueType(int Index, int Value);
+
+internal record StringValue(string Value);
