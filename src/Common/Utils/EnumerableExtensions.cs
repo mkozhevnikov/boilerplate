@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace Boilerplate.Common.Utils;
 
-public static class Enumerable
+public static class EnumerableExtensions
 {
     public static IEnumerable<T> AsEnumerable<T>(this IEnumerable enumerable)
     {
