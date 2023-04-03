@@ -1,8 +1,7 @@
-using System.ComponentModel;
+using System.Text.Json;
 using Boilerplate.Common.Data.Querying;
 using Boilerplate.Common.Utils;
 using FluentAssertions;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Boilerplate.Common.UnitTests.Data.Querying;
@@ -22,9 +21,8 @@ public class SortedListRequestTests
     [Fact]
     public void SortedListRequest_Serialization_SingleDescriptor()
     {
-        var valuePropertyDescriptor = new TestPropertyDescriptor(nameof(TestValueType.Value), null);
-        var sortDescription = new ListSortDescription(valuePropertyDescriptor, ListSortDirection.Descending);
-        var request = new TestSortedListRequest(sortDescription);
+        var valuePropertyDescriptor = TestPropertyDescriptor.Value;
+        var request = new TestSortedListRequest(valuePropertyDescriptor, Sort.Descending);
 
         var serialized = request.ToJson();
 
@@ -34,13 +32,12 @@ public class SortedListRequestTests
     [Fact]
     public void SortedListRequest_Serialization_TwoDescriptors()
     {
-        var valuePropertyDescriptor = new TestPropertyDescriptor(nameof(TestValueType.Value), null);
-        var indexPropertyDescriptor = new TestPropertyDescriptor(nameof(TestValueType.Index), null);
-        var sorting = new ListSortDescriptionCollection(new[] {
-            new ListSortDescription(valuePropertyDescriptor, ListSortDirection.Descending),
-            new ListSortDescription(indexPropertyDescriptor, ListSortDirection.Ascending)
-        });
-        var request = new TestSortedListRequest(sorting);
+        var valuePropertyDescriptor = TestPropertyDescriptor.Value;
+        var indexPropertyDescriptor = TestPropertyDescriptor.Index;
+        var request = new TestSortedListRequest(
+            (valuePropertyDescriptor, Sort.Descending),
+            (indexPropertyDescriptor, Sort.Ascending)
+        );
 
         var serialized = request.ToJson();
 
@@ -53,10 +50,10 @@ public class SortedListRequestTests
     {
         var serializedRequest = "{\"Sort\":[]}";
 
-        var deserialized = JsonConvert.DeserializeObject<TestSortedListRequest>(serializedRequest);
+        var deserialized = JsonSerializer.Deserialize<TestSortedListRequest>(serializedRequest);
 
         deserialized.Should().NotBeNull();
-        deserialized!.Sort.AsEnumerable<ListSortDescription>().Should().BeEmpty();
+        deserialized!.Sort.AsEnumerable().Should().BeEmpty();
     }
 
     [Fact]
@@ -64,11 +61,11 @@ public class SortedListRequestTests
     {
         var serializedRequest = "{\"Sort\":[{\"Field\":\"Value\",\"Dir\":\"Desc\"}]}";
 
-        var deserialized = JsonConvert.DeserializeObject<TestSortedListRequest>(serializedRequest);
+        var deserialized = JsonSerializer.Deserialize<TestSortedListRequest>(serializedRequest);
 
         deserialized.Should().NotBeNull();
-        deserialized!.Sort.AsEnumerable<ListSortDescription>().Should().NotBeEmpty().And.HaveCount(1);
-        deserialized.Sort[0]!.SortDirection.Should().Be(ListSortDirection.Descending);
+        deserialized!.Sort.Should().NotBeEmpty().And.HaveCount(1);
+        deserialized.Sort.First().Direction.Should().Be(Sort.Descending);
     }
 
     [Fact]
@@ -78,24 +75,11 @@ public class SortedListRequestTests
                                 "{\"Field\":\"Value\",\"Dir\":\"Desc\"}," +
                                 "{\"Field\":\"Index\",\"Dir\":\"Asc\"}]}";
 
-        var deserialized = JsonConvert.DeserializeObject<TestSortedListRequest>(serializedRequest);
+        var deserialized = JsonSerializer.Deserialize<TestSortedListRequest>(serializedRequest);
 
         deserialized.Should().NotBeNull();
-        deserialized!.Sort.AsEnumerable<ListSortDescription>().Should().NotBeEmpty().And.HaveCount(2);
-        deserialized.Sort[0]!.SortDirection.Should().Be(ListSortDirection.Descending);
-        deserialized.Sort[1]!.SortDirection.Should().Be(ListSortDirection.Ascending);
-    }
-
-    private class TestSortedListRequest : ISortedListRequest
-    {
-        [JsonConstructor]
-        public TestSortedListRequest(params ListSortDescription[] sortDescriptions)
-            : this(new ListSortDescriptionCollection(sortDescriptions))
-        {
-        }
-
-        public TestSortedListRequest(ListSortDescriptionCollection sorting) => Sort = sorting;
-
-        public ListSortDescriptionCollection Sort { get; set; }
+        deserialized!.Sort.Should().NotBeEmpty().And.HaveCount(2);
+        deserialized.Sort.First().Direction.Should().Be(Sort.Descending);
+        deserialized.Sort.Last().Direction.Should().Be(Sort.Ascending);
     }
 }
