@@ -2,7 +2,6 @@ using System.Linq.Expressions;
 using Ardalis.SmartEnum;
 using Boilerplate.Common.Utils;
 using Newtonsoft.Json.Linq;
-using Enumerable = System.Linq.Enumerable;
 
 namespace Boilerplate.Common.Data.Querying;
 
