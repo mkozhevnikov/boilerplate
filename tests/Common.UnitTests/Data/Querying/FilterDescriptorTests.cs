@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Text.Json;
 using Boilerplate.Common.Data.Querying;
 using Boilerplate.Common.Utils;
 using FluentAssertions;
@@ -260,5 +261,29 @@ public class FilterDescriptorTests
         var predicate = filter.ToExpression<TestValueType>();
 
         predicate.Compile().Invoke(testValue).Should().BeFalse();
+    }
+
+    [Theory]
+    [InlineData("""{"Field":"Value","Operator":"in","Value":[10,20]}""", 10, true)]
+    [InlineData("""{"Field":"Value","Operator":"in","Value":[10,20]}""", 30, false)]
+    public void FilterDescriptor_Deserialized_Expression_IntArray(string json, int testValue, bool expected)
+    {
+        var filter = JsonSerializer.Deserialize<FilterDescriptor>(json);
+
+        var predicate = filter!.ToExpression<TestValueType>();
+
+        predicate.Compile().Invoke(new TestValueType(1, testValue)).Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData("""{"Field":"Value","Operator":"in","Value":["Foo","Bar"]}""", "Foo", true)]
+    [InlineData("""{"Field":"Value","Operator":"in","Value":["Foo","Bar"]}""", "FooBar", false)]
+    public void FilterDescriptor_Deserialized_ToExpression_StringArray(string json, string testValue, bool expected)
+    {
+        var filter = JsonSerializer.Deserialize<FilterDescriptor>(json);
+
+        var predicate = filter!.ToExpression<StringValue>();
+
+        predicate.Compile().Invoke(new StringValue(testValue)).Should().Be(expected);
     }
 }
