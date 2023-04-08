@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
+using System.Text.Json;
 using Ardalis.SmartEnum;
 using Boilerplate.Common.Utils;
-using Newtonsoft.Json.Linq;
 
 namespace Boilerplate.Common.Data.Querying;
 
@@ -104,8 +104,8 @@ public abstract class Operator : SmartEnum<Operator>
             var memberReturnType = property.GetMemberReturnType();
             var filterValue = ((ConstantExpression)value).Value;
 
-            if (filterValue is JArray jArray) {
-                var listFilter = jArray.ToObject(typeof(List<>).MakeGenericType(memberReturnType));
+            if (filterValue is JsonElement { ValueKind: JsonValueKind.Array } jsonElement) {
+                var listFilter = jsonElement.Deserialize(typeof(List<>).MakeGenericType(memberReturnType));
                 value = Expression.Constant(listFilter);
             }
 
