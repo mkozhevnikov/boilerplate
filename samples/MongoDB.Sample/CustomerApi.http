@@ -1,0 +1,65 @@
+POST https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Name": "Jon Doe",
+	"Age": 32,
+	"Balance": 999.99
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Name",
+		"Operator": "eq",
+		"Value": "Jon Doe"
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer/64337d1c00403b537cf2ea16
+
+###
+
+PATCH https://localhost:5001/api/customer/643379e100403b537cf2ea14
+Content-Type: application/json
+
+{
+	"Name": "Jane Doe"
+}
+
+###
+
+DELETE https://localhost:5001/api/customer/643379e100403b537cf2ea14
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Age",
+		"Operator": "gt",
+		"Value": 30
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Balance",
+		"Operator": "lt",
+		"Value": 1000
+	}
+}
+

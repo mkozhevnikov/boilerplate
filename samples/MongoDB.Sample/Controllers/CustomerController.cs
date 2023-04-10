@@ -1,4 +1,5 @@
 ﻿using Boilerplate.Common.Data;
+using Boilerplate.Common.Data.Querying;
 using Boilerplate.MongoDB.Sample.Dtos;
 using Boilerplate.MongoDB.Sample.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +18,9 @@ public class CustomerController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Customer>> GetCustomers()
+    public ActionResult<IEnumerable<Customer>> GetCustomers([FromBody] GetCustomersRequest request)
     {
-        return Ok(repository.Read());
+        return Ok(repository.Read(request.ToSpec<Customer>()));
     }
 
     [HttpGet("{id}", Name = "GetCustomerById")]
@@ -38,7 +39,10 @@ public class CustomerController : ControllerBase
     public ActionResult<Customer> CreateCustomer(CustomerCreateDto model)
     {
         var customer = repository.Create(new Customer {
-            Name = model.Name
+            Name = model.Name,
+            CreatedOn = DateTime.Today,
+            Age = model.Age,
+            Balance = model.Balance
         });
         return CreatedAtRoute("GetCustomerById", new { customer.Id }, customer);
     }
@@ -59,4 +63,9 @@ public class CustomerController : ControllerBase
         repository.Delete(id);
         return NoContent();
     }
+}
+
+public class GetCustomersRequest : IFilteredListRequest
+{
+    public FilterDescriptor Filter { get; set; }
 }

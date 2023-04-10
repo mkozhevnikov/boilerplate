@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using System.Text.Json;
 using Boilerplate.Common.Data.Querying;
 
 namespace Boilerplate.Common.Utils;
@@ -19,7 +20,8 @@ public static class FilterDescriptorExtensions
 
         var param = Expression.Parameter(typeof(T));
         var property = Expression.Property(param, descriptor.Field);
-        var valueParam = Expression.Constant(descriptor.Value);
+        var extractedValue = descriptor.ExtractValue(property.GetMemberReturnType());
+        var valueParam = Expression.Constant(extractedValue);
         var expression = descriptor.Operator.CreateExpression(property, valueParam);
 
         return Expression.Lambda<Func<T, bool>>(expression, param);
@@ -42,5 +44,12 @@ public static class FilterDescriptorExtensions
         return descriptor.Filters
             .Select(ToExpression<T>)
             .Aggregate((prev, next) => descriptor.Logic.CreateExpression(prev, next));
+    }
+
+    private static object? ExtractValue(this FilterDescriptor descriptor, Type returnType)
+    {
+        return descriptor.Value is JsonElement jsonElement
+            ? jsonElement.Deserialize(returnType)
+            : descriptor.Value;
     }
 }
