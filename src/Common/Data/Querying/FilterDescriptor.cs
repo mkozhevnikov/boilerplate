@@ -19,7 +19,7 @@ public class FilterDescriptor
     /// The filter operator (comparison).
     /// </summary>
     [JsonConverter(typeof(SmartEnumNameConverter<Operator, int>))]
-    public Operator Operator { get; set; }
+    public Operator? Operator { get; set; }
 
     /// <summary>
     /// The value to which the field is compared. Has to be of the same type as the field.

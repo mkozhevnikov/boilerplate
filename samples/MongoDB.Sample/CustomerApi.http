@@ -63,3 +63,50 @@ Content-Type: application/json
 	}
 }
 
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"$type": "withLogic",
+		"Logic": "or",
+		"Filters": [{
+			"Field": "Age",
+			"Operator": "gt",
+			"Value": 20
+		},
+		{
+			"Field": "Balance",
+			"Operator": "gt",
+			"Value": 500
+		}]
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"$type": "withLogic",
+		"Logic": "and",
+		"Filters": [{
+			"Field": "Age",
+			"Operator": "gt",
+			"Value": 20
+		},
+		{
+			"Field": "Balance",
+			"Operator": "gt",
+			"Value": 500
+		}]
+	}
+}
+
+###
+
+
