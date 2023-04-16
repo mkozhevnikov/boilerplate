@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using System.Text.Json;
 using Ardalis.SmartEnum;
 using Boilerplate.Common.Utils;
 
@@ -102,13 +101,6 @@ public abstract class Operator : SmartEnum<Operator>
         public override Expression CreateExpression(Expression property, Expression value)
         {
             var memberReturnType = property.GetMemberReturnType();
-            var filterValue = ((ConstantExpression)value).Value;
-
-            if (filterValue is JsonElement { ValueKind: JsonValueKind.Array } jsonElement) {
-                var listFilter = jsonElement.Deserialize(typeof(List<>).MakeGenericType(memberReturnType));
-                value = Expression.Constant(listFilter);
-            }
-
             var containsMethod = typeof(Enumerable).GetMethods()
                 .Single(m => m.Name == nameof(Enumerable.Contains) && m.GetParameters().Length == 2)
                 .MakeGenericMethod(memberReturnType);
