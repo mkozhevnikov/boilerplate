@@ -286,4 +286,32 @@ public class FilterDescriptorTests
 
         predicate.Compile().Invoke(new StringValue(testValue)).Should().Be(expected);
     }
+
+    [Fact]
+    public void FilterDescriptor_JsonElementValue_Match()
+    {
+        var filter = new FilterDescriptor {
+            Field = nameof(TestValueType.Value),
+            Operator = Operator.In,
+            Value = JsonSerializer.SerializeToElement(new[] { 1, 10, 100 })
+        };
+
+        var predicate = filter.ToExpression<TestValueType>();
+
+        predicate.Compile().Invoke(new TestValueType(1, 10)).Should().BeTrue();
+    }
+
+    [Fact]
+    public void FilterDescriptor_JsonElementValue_NotMatch()
+    {
+        var filter = new FilterDescriptor {
+            Field = nameof(TestValueType.Value),
+            Operator = Operator.In,
+            Value = JsonSerializer.SerializeToElement(new[] { 1, 10, 100 })
+        };
+
+        var predicate = filter.ToExpression<TestValueType>();
+
+        predicate.Compile().Invoke(new TestValueType(1, 30)).Should().BeFalse();
+    }
 }

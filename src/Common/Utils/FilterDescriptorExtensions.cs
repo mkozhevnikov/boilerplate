@@ -48,8 +48,11 @@ public static class FilterDescriptorExtensions
 
     private static object? ExtractValue(this FilterDescriptor descriptor, Type returnType)
     {
-        return descriptor.Value is JsonElement jsonElement
-            ? jsonElement.Deserialize(returnType)
-            : descriptor.Value;
+        return descriptor.Value switch {
+            JsonElement { ValueKind: JsonValueKind.Array } jsonElement =>
+                jsonElement.Deserialize(typeof(List<>).MakeGenericType(returnType)),
+            JsonElement jsonElement => jsonElement.Deserialize(returnType),
+            _ => descriptor.Value
+        };
     }
 }

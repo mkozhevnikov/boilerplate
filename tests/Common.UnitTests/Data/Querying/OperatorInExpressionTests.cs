@@ -104,39 +104,7 @@ public class OperatorInExpressionTests
 
         Expression.Lambda<Func<TestClass, bool>>(expression, param)
             .Compile()
-            .Invoke(new TestClass { ValueObject = 10 })
-            .Should()
-            .BeTrue();
-    }
-
-    [Fact]
-    public void OperatorIn_CreateExpression_JsonElement_Match()
-    {
-        var param = Expression.Parameter(typeof(TestValueType));
-        var property = Expression.Property(param, nameof(TestValueType.Value));
-        var valueParam = Expression.Constant(JsonSerializer.SerializeToElement(new[] { 1, 10, 100 }));
-
-        var expression = Operator.In.CreateExpression(property, valueParam);
-
-        Expression.Lambda<Func<TestValueType, bool>>(expression, param)
-            .Compile()
-            .Invoke(new TestValueType(1, 10))
-            .Should()
-            .BeTrue();
-    }
-
-    [Fact]
-    public void OperatorIn_CreateExpression_JsonElement_NotMatch()
-    {
-        var param = Expression.Parameter(typeof(TestValueType));
-        var property = Expression.Property(param, nameof(TestValueType.Value));
-        var valueParam = Expression.Constant(JsonSerializer.SerializeToElement(new[] { 1, 10, 100 }));
-
-        var expression = Operator.In.CreateExpression(property, valueParam);
-
-        Expression.Lambda<Func<TestValueType, bool>>(expression, param)
-            .Compile()
-            .Invoke(new TestValueType(1, 30))
+            .Invoke(new TestClass { ValueObject = 30 })
             .Should()
             .BeFalse();
     }

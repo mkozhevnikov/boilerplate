@@ -26,7 +26,7 @@ GET https://localhost:5001/api/customer/64337d1c00403b537cf2ea16
 
 ###
 
-PATCH https://localhost:5001/api/customer/643379e100403b537cf2ea14
+PATCH https://localhost:5001/api/customer/643b6f96a2077b83435ac547
 Content-Type: application/json
 
 {
@@ -109,4 +109,28 @@ Content-Type: application/json
 
 ###
 
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Name",
+		"Operator": "in",
+		"Value": ["Jon Doe", "Jane Doe"]
+	}
+}
+
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Age",
+		"Operator": "in",
+		"Value": [0, 10, 32]
+	}
+}
 
