@@ -14,4 +14,6 @@ public class Customer : IEntity<string>
     public DateTime CreatedOn { get; set; }
 
     public double Balance { get; set; }
+
+    public string? Optional { get; set; }
 }
