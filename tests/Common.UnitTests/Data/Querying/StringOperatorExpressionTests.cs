@@ -14,7 +14,7 @@ public class StringOperatorExpressionTests
         var property = Expression.Property(param, nameof(StringValue.Value));
         var valueParam = Expression.Constant(value);
 
-        var expression = StringOperator.StartsWith.CreateExpression(property, valueParam);
+        var expression = Operator.StartsWith.CreateExpression(property, valueParam);
 
         Expression.Lambda<Func<StringValue, bool>>(expression, param)
             .Compile()
@@ -32,7 +32,7 @@ public class StringOperatorExpressionTests
         var property = Expression.Property(param, nameof(StringValue.Value));
         var valueParam = Expression.Constant(value);
 
-        var expression = StringOperator.EndsWith.CreateExpression(property, valueParam);
+        var expression = Operator.EndsWith.CreateExpression(property, valueParam);
 
         Expression.Lambda<Func<StringValue, bool>>(expression, param)
             .Compile()
@@ -51,7 +51,7 @@ public class StringOperatorExpressionTests
         var property = Expression.Property(param, nameof(StringValue.Value));
         var valueParam = Expression.Constant(value);
 
-        var expression = StringOperator.Contains.CreateExpression(property, valueParam);
+        var expression = Operator.Contains.CreateExpression(property, valueParam);
 
         Expression.Lambda<Func<StringValue, bool>>(expression, param)
             .Compile()
@@ -70,7 +70,7 @@ public class StringOperatorExpressionTests
         var property = Expression.Property(param, nameof(StringValue.Value));
         var valueParam = Expression.Constant(value);
 
-        var expression = StringOperator.DoesNotContain.CreateExpression(property, valueParam);
+        var expression = Operator.DoesNotContain.CreateExpression(property, valueParam);
 
         Expression.Lambda<Func<StringValue, bool>>(expression, param)
             .Compile()
@@ -87,7 +87,7 @@ public class StringOperatorExpressionTests
         var param = Expression.Parameter(typeof(StringValue));
         var property = Expression.Property(param, nameof(StringValue.Value));
 
-        var expression = StringOperator.IsEmpty.CreateExpression(property, null!);
+        var expression = Operator.IsEmpty.CreateExpression(property, null!);
 
         Expression.Lambda<Func<StringValue, bool>>(expression, param)
             .Compile()
@@ -104,7 +104,7 @@ public class StringOperatorExpressionTests
         var param = Expression.Parameter(typeof(StringValue));
         var property = Expression.Property(param, nameof(StringValue.Value));
 
-        var expression = StringOperator.IsNotEmpty.CreateExpression(property, null!);
+        var expression = Operator.IsNotEmpty.CreateExpression(property, null!);
 
         Expression.Lambda<Func<StringValue, bool>>(expression, param)
             .Compile()

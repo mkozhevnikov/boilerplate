@@ -3,7 +3,7 @@ using Boilerplate.Common.Utils;
 
 namespace Boilerplate.Common.Data.Querying;
 
-public abstract class StringOperator : Operator
+public abstract partial class Operator
 {
     private const string startsWith = "startswith";
     private const string endsWith = "endswith";
@@ -19,77 +19,51 @@ public abstract class StringOperator : Operator
     public static readonly Operator IsEmpty = new IsEmptyOperator();
     public static readonly Operator IsNotEmpty = new IsNotEmptyOperator();
 
-    public override Expression CreateExpression(Expression property, Expression value)
-    {
-        var memberReturnType = property.GetMemberReturnType();
-        if (memberReturnType != typeof(string)) {
-            throw new ArgumentException($"Can't use string operator with member of Type: {memberReturnType}");
-        }
-
-        var method = typeof(string).GetMethod(MethodName, new[] { typeof(string) });
-        return Expression.Call(property, method, value);
-    }
-
-    protected abstract string MethodName { get; }
-
-    protected StringOperator(string name, int value) : base(name, value)
-    {
-    }
-
-    private sealed class StartsWithOperator : StringOperator
+    private sealed class StartsWithOperator : Operator
     {
         public StartsWithOperator() : base(startsWith, 9) {}
 
-        protected override string MethodName => nameof(string.StartsWith);
+        public override Expression CreateExpression(Expression property, Expression value) =>
+            StringExpression.StartsWith(property, value);
     }
 
-    private sealed class EndsWithOperator : StringOperator
+    private sealed class EndsWithOperator : Operator
     {
         public EndsWithOperator() : base(endsWith, 10) {}
 
-        protected override string MethodName => nameof(string.EndsWith);
+        public override Expression CreateExpression(Expression property, Expression value) =>
+            StringExpression.EndsWith(property, value);
     }
 
-    private sealed class ContainsOperator : StringOperator
+    private sealed class ContainsOperator : Operator
     {
         public ContainsOperator() : base(contains, 11) {}
 
-        protected override string MethodName => nameof(string.Contains);
+        public override Expression CreateExpression(Expression property, Expression value) =>
+            StringExpression.Contains(property, value);
     }
 
-    private sealed class DoesNotContainOperator : StringOperator
+    private sealed class DoesNotContainOperator : Operator
     {
         public DoesNotContainOperator() : base(doesNotContain, 12) {}
 
-        protected override string MethodName => nameof(string.Contains);
-
         public override Expression CreateExpression(Expression property, Expression value) =>
-            Expression.Not(base.CreateExpression(property, value));
+            Expression.Not(StringExpression.Contains(property, value));
     }
 
-    private sealed class IsEmptyOperator : StringOperator
+    private sealed class IsEmptyOperator : Operator
     {
         public IsEmptyOperator() : base(isEmpty, 13) {}
 
-        protected override string MethodName => nameof(StringExtensions.IsEmpty);
-
-        public override Expression CreateExpression(Expression property, Expression value)
-        {
-            var method = typeof(StringExtensions).GetMethod(MethodName, new[] { typeof(string) });
-            return Expression.Call(null, method, property);
-        }
+        public override Expression CreateExpression(Expression property, Expression value) =>
+            StringExpression.IsEmpty(property);
     }
 
-    private sealed class IsNotEmptyOperator : StringOperator
+    private sealed class IsNotEmptyOperator : Operator
     {
         public IsNotEmptyOperator() : base(isNotEmpty, 14) {}
 
-        protected override string MethodName => nameof(StringExtensions.IsNotEmpty);
-
-        public override Expression CreateExpression(Expression property, Expression value)
-        {
-            var method = typeof(StringExtensions).GetMethod(MethodName, new[] { typeof(string) });
-            return Expression.Call(null, method, property);
-        }
+        public override Expression CreateExpression(Expression property, Expression value) =>
+            Expression.Not(StringExpression.IsEmpty(property));
     }
 }

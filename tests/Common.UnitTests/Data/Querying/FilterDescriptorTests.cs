@@ -143,19 +143,19 @@ public class FilterDescriptorTests
     }
 
     public static IEnumerable<object[]> PositiveStringComparisons => new List<object[]> {
-        new object[] { "Foo Bar", "Foo", StringOperator.StartsWith },
-        new object[] { "Foo Bar", "Bar", StringOperator.EndsWith },
-        new object[] { "Foo Bar", "Bar", StringOperator.Contains },
-        new object[] { "Foo Bar", "Baz", StringOperator.DoesNotContain },
-        new object[] { "", null!, StringOperator.IsEmpty },
-        new object[] { null!, null!, StringOperator.IsEmpty },
-        new object[] { "Foo Bar", null!, StringOperator.IsNotEmpty }
+        new object[] { "Foo Bar", "Foo", Operator.StartsWith },
+        new object[] { "Foo Bar", "Bar", Operator.EndsWith },
+        new object[] { "Foo Bar", "Bar", Operator.Contains },
+        new object[] { "Foo Bar", "Baz", Operator.DoesNotContain },
+        new object[] { "", null!, Operator.IsEmpty },
+        new object[] { null!, null!, Operator.IsEmpty },
+        new object[] { "Foo Bar", null!, Operator.IsNotEmpty }
     };
 
     [Theory]
     [MemberData(nameof(PositiveStringComparisons))]
     public void FilterDescriptor_ToExpression_StringOperations_Positive(
-        string value, string? compareTo, StringOperator op)
+        string value, string? compareTo, Operator op)
     {
         var filter = new FilterDescriptor {
             Field = nameof(TestValueType.Value),
@@ -169,19 +169,19 @@ public class FilterDescriptorTests
     }
 
     public static IEnumerable<object[]> NegativeStringComparisons => new List<object[]> {
-        new object[] { "Foo Bar", "Bar", StringOperator.StartsWith },
-        new object[] { "Foo Bar", "Foo", StringOperator.EndsWith },
-        new object[] { "Foo Bar", "Baz", StringOperator.Contains },
-        new object[] { "Foo Bar", "Bar", StringOperator.DoesNotContain },
-        new object[] { "Foo Bar", null!, StringOperator.IsEmpty },
-        new object[] { "", null!, StringOperator.IsNotEmpty },
-        new object[] { null!, null!, StringOperator.IsNotEmpty }
+        new object[] { "Foo Bar", "Bar", Operator.StartsWith },
+        new object[] { "Foo Bar", "Foo", Operator.EndsWith },
+        new object[] { "Foo Bar", "Baz", Operator.Contains },
+        new object[] { "Foo Bar", "Bar", Operator.DoesNotContain },
+        new object[] { "Foo Bar", null!, Operator.IsEmpty },
+        new object[] { "", null!, Operator.IsNotEmpty },
+        new object[] { null!, null!, Operator.IsNotEmpty }
     };
 
     [Theory]
     [MemberData(nameof(NegativeStringComparisons))]
     public void FilterDescriptor_ToExpression_StringOperations_Negative(
-        string value, string? compareTo, StringOperator op)
+        string value, string? compareTo, Operator op)
     {
         var filter = new FilterDescriptor {
             Field = nameof(TestValueType.Value),

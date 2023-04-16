@@ -206,6 +206,72 @@ Content-Type: application/json
 {
 	"Filter": {
 		"Field": "Name",
-		"Operator": "startswith"
+		"Operator": "startswith",
+		"Value": "Jon"
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Name",
+		"Operator": "endswith",
+		"Value": "Doe"
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Name",
+		"Operator": "contains",
+		"Value": "Do"
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Name",
+		"Operator": "doesnotcontain",
+		"Value": "Jon"
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Name",
+		"Operator": "isempty",
+		"Value": "Jon"
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Name",
+		"Operator": "isnotempty",
+		"Value": "Jon"
 	}
 }

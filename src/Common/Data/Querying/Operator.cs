@@ -4,7 +4,7 @@ using Boilerplate.Common.Utils;
 
 namespace Boilerplate.Common.Data.Querying;
 
-public abstract class Operator : SmartEnum<Operator>
+public abstract partial class Operator : SmartEnum<Operator>
 {
     private const string equalTo = "eq";
     private const string notEqual = "neq";
@@ -14,7 +14,7 @@ public abstract class Operator : SmartEnum<Operator>
     private const string lessThanOrEqualTo = "lte";
     private const string greaterThan = "gt";
     private const string greaterThanOrEqualTo = "gte";
-    private const string contains = "in";
+    private const string listContains = "in";
 
     public static readonly Operator EqualTo = new EqualToOperator();
     public static readonly Operator NotEqualTo = new NotEqualToOperator();
@@ -24,7 +24,7 @@ public abstract class Operator : SmartEnum<Operator>
     public static readonly Operator LessThanOrEqualTo = new LessThanOrEqualToOperator();
     public static readonly Operator GreaterThan = new GreaterThanOperator();
     public static readonly Operator GreaterThanOrEqualTo = new GreaterThanOrEqualToOperator();
-    public static readonly Operator In = new ContainsOperator();
+    public static readonly Operator In = new ListContainsOperator();
 
     public abstract Expression CreateExpression(Expression property, Expression value);
 
@@ -94,9 +94,9 @@ public abstract class Operator : SmartEnum<Operator>
             Expression.GreaterThanOrEqual(property, value);
     }
 
-    private sealed class ContainsOperator : Operator
+    private sealed class ListContainsOperator : Operator
     {
-        public ContainsOperator() : base(contains, 15) {}
+        public ListContainsOperator() : base(listContains, 15) {}
 
         public override Expression CreateExpression(Expression property, Expression value)
         {
