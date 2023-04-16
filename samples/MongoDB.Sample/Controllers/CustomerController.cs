@@ -52,7 +52,8 @@ public class CustomerController : ControllerBase
     {
         var customer = repository.Update(new Customer {
             Id = id,
-            Name = model.Name
+            Name = model.Name,
+            Optional = model.Optional
         });
         return Ok(customer);
     }

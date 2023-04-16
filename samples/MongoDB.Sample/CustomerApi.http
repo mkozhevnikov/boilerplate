@@ -30,7 +30,8 @@ PATCH https://localhost:5001/api/customer/643b6f96a2077b83435ac547
 Content-Type: application/json
 
 {
-	"Name": "Jane Doe"
+	"Name": "Jane Doe",
+	"Optional": "f6158bf7dab049669644408840182ab0"
 }
 
 ###
@@ -57,9 +58,35 @@ Content-Type: application/json
 
 {
 	"Filter": {
+		"Field": "Age",
+		"Operator": "gte",
+		"Value": 32
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
 		"Field": "Balance",
 		"Operator": "lt",
 		"Value": 1000
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Balance",
+		"Operator": "lte",
+		"Value": 999.99
 	}
 }
 
@@ -134,3 +161,117 @@ Content-Type: application/json
 	}
 }
 
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Name",
+		"Operator": "neq",
+		"Value": "Jon Doe"
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Optional",
+		"Operator": "isnull"
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Optional",
+		"Operator": "isnotnull"
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Name",
+		"Operator": "startswith",
+		"Value": "Jon"
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Name",
+		"Operator": "endswith",
+		"Value": "Doe"
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Name",
+		"Operator": "contains",
+		"Value": "Do"
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Name",
+		"Operator": "doesnotcontain",
+		"Value": "Jon"
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Name",
+		"Operator": "isempty",
+		"Value": "Jon"
+	}
+}
+
+###
+
+GET https://localhost:5001/api/customer
+Content-Type: application/json
+
+{
+	"Filter": {
+		"Field": "Name",
+		"Operator": "isnotempty",
+		"Value": "Jon"
+	}
+}

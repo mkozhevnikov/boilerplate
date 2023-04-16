@@ -1,9 +1,6 @@
 using System.Collections;
-using System.Text.Json;
 using Boilerplate.Common.Data.Querying;
 using Boilerplate.Common.Utils;
-using FluentAssertions;
-using Xunit;
 
 namespace Boilerplate.Common.UnitTests.Data.Querying;
 
@@ -51,9 +48,8 @@ public class FilterDescriptorTests
 
     [Theory]
     [ClassData(typeof(PositiveIntComparison))]
-    public void FilterDescriptor_Expression_IntComparison_Positive(int value, int compareTo, Operator op)
+    public void FilterDescriptor_ToExpression_IntComparison_Positive(int value, int compareTo, Operator op)
     {
-        var testValue = new TestValueType(1, value);
         var filter = new FilterDescriptor {
             Field = nameof(TestValueType.Value),
             Operator = op,
@@ -62,14 +58,13 @@ public class FilterDescriptorTests
 
         var predicate = filter.ToExpression<TestValueType>();
 
-        predicate.Compile().Invoke(testValue).Should().BeTrue();
+        predicate.Compile().Invoke(new TestValueType(1, value)).Should().BeTrue();
     }
 
     [Theory]
     [ClassData(typeof(NegativeIntComparison))]
-    public void FilterDescriptor_Expression_IntComparison_Negative(int value, int compareTo, Operator op)
+    public void FilterDescriptor_ToExpression_IntComparison_Negative(int value, int compareTo, Operator op)
     {
-        var testValue = new TestValueType(1, value);
         var filter = new FilterDescriptor {
             Field = nameof(TestValueType.Value),
             Operator = op,
@@ -78,7 +73,7 @@ public class FilterDescriptorTests
 
         var predicate = filter.ToExpression<TestValueType>();
 
-        predicate.Compile().Invoke(testValue).Should().BeFalse();
+        predicate.Compile().Invoke(new TestValueType(1, value)).Should().BeFalse();
     }
 
     private record NullableValue(int? Value);
@@ -119,9 +114,8 @@ public class FilterDescriptorTests
 
     [Theory]
     [ClassData(typeof(PositiveNullableComparison))]
-    public void FilterDescriptor_Expression_Nullable_Positive(int? value, Operator op)
+    public void FilterDescriptor_ToExpression_Nullable_Positive(int? value, Operator op)
     {
-        var testValue = new NullableValue(value);
         var filter = new FilterDescriptor {
             Field = nameof(NullableValue.Value),
             Operator = op,
@@ -130,14 +124,13 @@ public class FilterDescriptorTests
 
         var predicate = filter.ToExpression<NullableValue>();
 
-        predicate.Compile().Invoke(testValue).Should().BeTrue();
+        predicate.Compile().Invoke(new NullableValue(value)).Should().BeTrue();
     }
 
     [Theory]
     [ClassData(typeof(NegativeNullableComparison))]
-    public void FilterDescriptor_Expression_Nullable_Negative(int? value, Operator op)
+    public void FilterDescriptor_ToExpression_Nullable_Negative(int? value, Operator op)
     {
-        var testValue = new NullableValue(value);
         var filter = new FilterDescriptor {
             Field = nameof(TestValueType.Value),
             Operator = op,
@@ -146,25 +139,24 @@ public class FilterDescriptorTests
 
         var predicate = filter.ToExpression<NullableValue>();
 
-        predicate.Compile().Invoke(testValue).Should().BeFalse();
+        predicate.Compile().Invoke(new NullableValue(value)).Should().BeFalse();
     }
 
     public static IEnumerable<object[]> PositiveStringComparisons => new List<object[]> {
-        new object[] { "Foo Bar", "Foo", StringOperator.StartsWith },
-        new object[] { "Foo Bar", "Bar", StringOperator.EndsWith },
-        new object[] { "Foo Bar", "Bar", StringOperator.Contains },
-        new object[] { "Foo Bar", "Baz", StringOperator.DoesNotContain },
-        new object[] { "", null!, StringOperator.IsEmpty },
-        new object[] { null!, null!, StringOperator.IsEmpty },
-        new object[] { "Foo Bar", null!, StringOperator.IsNotEmpty }
+        new object[] { "Foo Bar", "Foo", Operator.StartsWith },
+        new object[] { "Foo Bar", "Bar", Operator.EndsWith },
+        new object[] { "Foo Bar", "Bar", Operator.Contains },
+        new object[] { "Foo Bar", "Baz", Operator.DoesNotContain },
+        new object[] { "", null!, Operator.IsEmpty },
+        new object[] { null!, null!, Operator.IsEmpty },
+        new object[] { "Foo Bar", null!, Operator.IsNotEmpty }
     };
 
     [Theory]
     [MemberData(nameof(PositiveStringComparisons))]
-    public void FilterDescriptor_Expression_StringOperations_Positive(
-        string value, string? compareTo, StringOperator op)
+    public void FilterDescriptor_ToExpression_StringOperations_Positive(
+        string value, string? compareTo, Operator op)
     {
-        var testValue = new StringValue(value);
         var filter = new FilterDescriptor {
             Field = nameof(TestValueType.Value),
             Operator = op,
@@ -173,25 +165,24 @@ public class FilterDescriptorTests
 
         var predicate = filter.ToExpression<StringValue>();
 
-        predicate.Compile().Invoke(testValue).Should().BeTrue();
+        predicate.Compile().Invoke(new StringValue(value)).Should().BeTrue();
     }
 
     public static IEnumerable<object[]> NegativeStringComparisons => new List<object[]> {
-        new object[] { "Foo Bar", "Bar", StringOperator.StartsWith },
-        new object[] { "Foo Bar", "Foo", StringOperator.EndsWith },
-        new object[] { "Foo Bar", "Baz", StringOperator.Contains },
-        new object[] { "Foo Bar", "Bar", StringOperator.DoesNotContain },
-        new object[] { "Foo Bar", null!, StringOperator.IsEmpty },
-        new object[] { "", null!, StringOperator.IsNotEmpty },
-        new object[] { null!, null!, StringOperator.IsNotEmpty }
+        new object[] { "Foo Bar", "Bar", Operator.StartsWith },
+        new object[] { "Foo Bar", "Foo", Operator.EndsWith },
+        new object[] { "Foo Bar", "Baz", Operator.Contains },
+        new object[] { "Foo Bar", "Bar", Operator.DoesNotContain },
+        new object[] { "Foo Bar", null!, Operator.IsEmpty },
+        new object[] { "", null!, Operator.IsNotEmpty },
+        new object[] { null!, null!, Operator.IsNotEmpty }
     };
 
     [Theory]
     [MemberData(nameof(NegativeStringComparisons))]
-    public void FilterDescriptor_Expression_StringOperations_Negative(
-        string value, string? compareTo, StringOperator op)
+    public void FilterDescriptor_ToExpression_StringOperations_Negative(
+        string value, string? compareTo, Operator op)
     {
-        var testValue = new StringValue(value);
         var filter = new FilterDescriptor {
             Field = nameof(TestValueType.Value),
             Operator = op,
@@ -200,13 +191,12 @@ public class FilterDescriptorTests
 
         var predicate = filter.ToExpression<StringValue>();
 
-        predicate.Compile().Invoke(testValue).Should().BeFalse();
+        predicate.Compile().Invoke(new StringValue(value)).Should().BeFalse();
     }
 
     [Fact]
-    public void FilterDescriptor_Expression_String_InArray()
+    public void FilterDescriptor_ToExpression_String_InArray()
     {
-        var testValue = new StringValue("Foo Bar");
         var filter = new FilterDescriptor {
             Field = nameof(StringValue.Value),
             Operator = Operator.In,
@@ -215,13 +205,12 @@ public class FilterDescriptorTests
 
         var predicate = filter.ToExpression<StringValue>();
 
-        predicate.Compile().Invoke(testValue).Should().BeTrue();
+        predicate.Compile().Invoke(new StringValue("Foo Bar")).Should().BeTrue();
     }
 
     [Fact]
-    public void FilterDescriptor_Expression_String_NotInArray()
+    public void FilterDescriptor_ToExpression_String_NotInArray()
     {
-        var testValue = new StringValue("Foo Bar");
         var filter = new FilterDescriptor {
             Field = nameof(StringValue.Value),
             Operator = Operator.In,
@@ -230,13 +219,12 @@ public class FilterDescriptorTests
 
         var predicate = filter.ToExpression<StringValue>();
 
-        predicate.Compile().Invoke(testValue).Should().BeFalse();
+        predicate.Compile().Invoke(new StringValue("Foo Bar")).Should().BeFalse();
     }
 
     [Fact]
-    public void FilterDescriptor_Expression_Int_InArray()
+    public void FilterDescriptor_ToExpression_Int_InArray()
     {
-        var testValue = new TestValueType(1, 10);
         var filter = new FilterDescriptor {
             Field = nameof(TestValueType.Value),
             Operator = Operator.In,
@@ -245,13 +233,12 @@ public class FilterDescriptorTests
 
         var predicate = filter.ToExpression<TestValueType>();
 
-        predicate.Compile().Invoke(testValue).Should().BeTrue();
+        predicate.Compile().Invoke(new TestValueType(1, 10)).Should().BeTrue();
     }
 
     [Fact]
-    public void FilterDescriptor_Expression_Int_NotInArray()
+    public void FilterDescriptor_ToExpression_Int_NotInArray()
     {
-        var testValue = new TestValueType(1, 10);
         var filter = new FilterDescriptor {
             Field = nameof(TestValueType.Value),
             Operator = Operator.In,
@@ -260,7 +247,7 @@ public class FilterDescriptorTests
 
         var predicate = filter.ToExpression<TestValueType>();
 
-        predicate.Compile().Invoke(testValue).Should().BeFalse();
+        predicate.Compile().Invoke(new TestValueType(1, 10)).Should().BeFalse();
     }
 
     [Theory]

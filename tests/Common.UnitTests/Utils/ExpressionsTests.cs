@@ -1,7 +1,5 @@
 using System.Linq.Expressions;
 using Boilerplate.Common.Utils;
-using FluentAssertions;
-using Xunit;
 
 namespace Boilerplate.Common.UnitTests.Utils;
 

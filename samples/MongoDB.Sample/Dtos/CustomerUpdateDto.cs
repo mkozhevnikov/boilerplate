@@ -6,4 +6,6 @@ public class CustomerUpdateDto
 {
     [Required]
     public string Name { get; set; }
+
+    public string? Optional { get; set; }
 }

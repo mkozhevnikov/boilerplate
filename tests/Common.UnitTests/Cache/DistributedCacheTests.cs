@@ -1,12 +1,9 @@
 using System.Text;
-using System.Text.Json;
 using Boilerplate.Common.Cache;
-using FluentAssertions;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace Boilerplate.Common.UnitTests.Cache;
 
