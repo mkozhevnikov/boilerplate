@@ -1,7 +1,5 @@
 using Boilerplate.Common.Data.Querying;
 using Boilerplate.Common.Utils;
-using FluentAssertions;
-using Xunit;
 
 namespace Boilerplate.Common.UnitTests.Data.Querying;
 

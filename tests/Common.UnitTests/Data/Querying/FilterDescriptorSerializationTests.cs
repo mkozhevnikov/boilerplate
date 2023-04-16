@@ -1,9 +1,6 @@
-using System.Text.Json;
 using Ardalis.SmartEnum.SystemTextJson;
 using Boilerplate.Common.Data.Querying;
 using Boilerplate.Common.Utils;
-using FluentAssertions;
-using Xunit;
 
 namespace Boilerplate.Common.UnitTests.Data.Querying;
 
